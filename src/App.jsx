@@ -213,6 +213,25 @@ function GlobalStyles() {
         right: -30px;
         background: radial-gradient(circle, rgba(255, 105, 180, 0.18), transparent 70%);
       }
+      .kt-coming-soon {
+        position: relative;
+        display: block;
+        font-size: clamp(22px, 7.5vw, 38px);
+        font-weight: 900;
+        letter-spacing: 3px;
+        color: #fff3c4;
+        text-shadow: 0 0 14px rgba(255, 216, 107, 0.95), 0 0 30px rgba(212, 175, 55, 0.7);
+        margin-bottom: clamp(6px, 2vw, 10px);
+        animation: kt-blink 1s steps(1, end) infinite;
+      }
+      @keyframes kt-blink {
+        0%, 49% {
+          opacity: 1;
+        }
+        50%, 100% {
+          opacity: 0.25;
+        }
+      }
       .kt-hero-icon {
         position: relative;
         display: block;
@@ -614,6 +633,7 @@ function GuestPage() {
     <div className="kt-app">
       <div className="kt-container">
         <div className="kt-hero">
+          <span className="kt-coming-soon">COMING SOON</span>
           <KaraokeIcon className="kt-hero-icon" />
           <h1 className="kt-hero-name">{CONFIG.storeName}</h1>
           <span className="kt-hero-pill">
