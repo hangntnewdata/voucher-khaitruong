@@ -531,6 +531,58 @@ function GlobalStyles() {
         opacity: 0.6;
         cursor: not-allowed;
       }
+      .kt-modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.78);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        z-index: 50;
+      }
+      .kt-modal-box {
+        width: 100%;
+        max-width: 380px;
+        max-height: 92svh;
+        overflow-y: auto;
+        background: #14171e;
+        border: 1px solid #232936;
+        border-radius: 20px;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .kt-modal-close {
+        position: fixed;
+        top: max(16px, env(safe-area-inset-top));
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1px solid #232936;
+        background: #1c2029;
+        color: #e8e8ea;
+        font-size: 16px;
+        line-height: 1;
+        cursor: pointer;
+        z-index: 51;
+      }
+      .kt-modal-hint {
+        margin: 0;
+        text-align: center;
+        font-size: 14px;
+        font-weight: 700;
+        color: #f0d98c;
+      }
+      .kt-modal-img {
+        width: 100%;
+        max-width: 240px;
+        border-radius: 14px;
+        display: block;
+      }
       .kt-toggle {
         background: transparent;
         border: 1px solid #232936;
@@ -598,6 +650,7 @@ function GuestPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [downloading, setDownloading] = useState(false)
+  const [previewSrc, setPreviewSrc] = useState(null)
   const captureRef = useRef(null)
 
   async function loadExisting(existingCode) {
@@ -666,16 +719,21 @@ function GuestPage() {
         backgroundColor: '#0f1115',
         pixelRatio: 2,
       })
-      const link = document.createElement('a')
-      link.download = `voucher-${code}.png`
-      link.href = dataUrl
-      link.click()
+      setPreviewSrc(dataUrl)
     } catch {
       setError('Không tải được ảnh, vui lòng chụp màn hình thay thế.')
     } finally {
       captureRef.current.classList.remove('kt-capturing')
       setDownloading(false)
     }
+  }
+
+  function handleConfirmDownload() {
+    if (!previewSrc) return
+    const link = document.createElement('a')
+    link.download = `voucher-${code}.png`
+    link.href = previewSrc
+    link.click()
   }
 
   return (
@@ -728,6 +786,21 @@ function GuestPage() {
           </div>
         )}
       </div>
+
+      {previewSrc && (
+        <div className="kt-modal-overlay" onClick={() => setPreviewSrc(null)}>
+          <div className="kt-modal-box" onClick={(e) => e.stopPropagation()}>
+            <button className="kt-modal-close" onClick={() => setPreviewSrc(null)} aria-label="Đóng">
+              ✕
+            </button>
+            <p className="kt-modal-hint">👇 Bấm giữ vào ảnh bên dưới để lưu về máy</p>
+            <img className="kt-modal-img" src={previewSrc} alt="Voucher" />
+            <button className="kt-btn" onClick={handleConfirmDownload}>
+              Tải xuống
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
