@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import QRCode from 'react-qr-code'
 import { Html5Qrcode } from 'html5-qrcode'
+import { toPng } from 'html-to-image'
 
 // ============== CONFIG ==============
 const CONFIG = {
@@ -159,6 +160,11 @@ function GlobalStyles() {
         flex-direction: column;
         gap: 16px;
       }
+      .kt-capture {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
       .kt-card {
         background: #14171e;
         border: 1px solid #232936;
@@ -223,6 +229,10 @@ function GlobalStyles() {
         text-shadow: 0 0 14px rgba(255, 216, 107, 0.95), 0 0 30px rgba(212, 175, 55, 0.7);
         margin-bottom: clamp(6px, 2vw, 10px);
         animation: kt-blink 1s steps(1, end) infinite;
+      }
+      .kt-capturing .kt-coming-soon {
+        animation: none;
+        opacity: 1;
       }
       @keyframes kt-blink {
         0%, 49% {
@@ -505,6 +515,22 @@ function GlobalStyles() {
           transform: scale(1.08);
         }
       }
+      .kt-download-link {
+        appearance: none;
+        background: transparent;
+        border: none;
+        margin: 2px 0 0;
+        padding: 4px;
+        color: #d4af37;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .kt-download-link:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
       .kt-toggle {
         background: transparent;
         border: 1px solid #232936;
@@ -571,6 +597,8 @@ function GuestPage() {
   const [code, setCode] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [downloading, setDownloading] = useState(false)
+  const captureRef = useRef(null)
 
   async function loadExisting(existingCode) {
     const { data, error: err } = await supabase
@@ -629,17 +657,50 @@ function GuestPage() {
     }
   }
 
+  async function handleDownloadImage() {
+    if (!captureRef.current) return
+    setDownloading(true)
+    captureRef.current.classList.add('kt-capturing')
+    try {
+      const dataUrl = await toPng(captureRef.current, {
+        backgroundColor: '#0f1115',
+        pixelRatio: 2,
+      })
+      const link = document.createElement('a')
+      link.download = `voucher-${code}.png`
+      link.href = dataUrl
+      link.click()
+    } catch {
+      setError('Không tải được ảnh, vui lòng chụp màn hình thay thế.')
+    } finally {
+      captureRef.current.classList.remove('kt-capturing')
+      setDownloading(false)
+    }
+  }
+
   return (
     <div className="kt-app">
       <div className="kt-container">
-        <div className="kt-hero">
-          <span className="kt-coming-soon">COMING SOON</span>
-          <KaraokeIcon className="kt-hero-icon" />
-          <h1 className="kt-hero-name">{CONFIG.storeName}</h1>
-          <span className="kt-hero-pill">
-            <span className="kt-hero-dot" />
-            {CONFIG.tagline} · {CONFIG.openingText}
-          </span>
+        <div ref={captureRef} className="kt-capture">
+          <div className="kt-hero">
+            <span className="kt-coming-soon">COMING SOON</span>
+            <KaraokeIcon className="kt-hero-icon" />
+            <h1 className="kt-hero-name">{CONFIG.storeName}</h1>
+            <span className="kt-hero-pill">
+              <span className="kt-hero-dot" />
+              {CONFIG.tagline} · {CONFIG.openingText}
+            </span>
+          </div>
+
+          {code && (
+            <div className="kt-card kt-center">
+              <span className="kt-badge">-{CONFIG.discountPercent}%</span>
+              <div className="kt-qr-wrap">
+                <QRCode value={code} size={180} />
+              </div>
+              <div className="kt-code">{code}</div>
+            </div>
+          )}
         </div>
 
         {!code && (
@@ -656,15 +717,14 @@ function GuestPage() {
 
         {code && (
           <div className="kt-card kt-center">
-            <span className="kt-badge">-{CONFIG.discountPercent}%</span>
-            <div className="kt-qr-wrap">
-              <QRCode value={code} size={180} />
-            </div>
-            <div className="kt-code">{code}</div>
             <button className="kt-btn kt-btn-secondary" onClick={handleCopy}>
               Sao chép mã
             </button>
             <p className="kt-screenshot-hint">📸 Hãy chụp màn hình để lưu lại voucher nhé!</p>
+            <button className="kt-download-link" onClick={handleDownloadImage} disabled={downloading}>
+              {downloading ? 'Đang tạo ảnh...' : '📥 Hoặc bấm vào đây để tải ảnh'}
+            </button>
+            {error && <p style={{ color: '#e74c3c', fontSize: 13 }}>{error}</p>}
           </div>
         )}
       </div>
