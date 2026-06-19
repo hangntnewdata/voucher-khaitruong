@@ -43,6 +43,13 @@ function detectDevice() {
   return 'Khác'
 }
 
+function isInAppBrowser() {
+  // Trinh duyet nhung cua Zalo/Facebook/Messenger chan hanh dong <a download>
+  // (hien dialog "thoat app" roi bao loi). Cac trinh duyet nay deu de lai
+  // dau hieu rieng trong User-Agent.
+  return /zalo|FBAN|FBAV|FB_IAB|Messenger|Instagram|Line\//i.test(navigator.userAgent || '')
+}
+
 function formatDate(value) {
   if (!value) return ''
   try {
@@ -795,9 +802,11 @@ function GuestPage() {
             </button>
             <p className="kt-modal-hint">👇 Bấm giữ vào ảnh bên dưới để lưu về máy</p>
             <img className="kt-modal-img" src={previewSrc} alt="Voucher" />
-            <button className="kt-btn" onClick={handleConfirmDownload}>
-              Tải xuống
-            </button>
+            {!isInAppBrowser() && (
+              <button className="kt-btn" onClick={handleConfirmDownload}>
+                Tải xuống
+              </button>
+            )}
           </div>
         </div>
       )}
