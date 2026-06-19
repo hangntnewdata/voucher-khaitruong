@@ -32,6 +32,16 @@ function randomCode() {
   return `KT-${s}`
 }
 
+function detectDevice() {
+  const ua = navigator.userAgent || ''
+  if (/iPhone|iPad|iPod/i.test(ua)) return 'iOS'
+  if (/Android/i.test(ua)) return 'Android'
+  if (/Windows/i.test(ua)) return 'Windows'
+  if (/Macintosh|Mac OS X/i.test(ua)) return 'macOS'
+  if (/Linux/i.test(ua)) return 'Linux'
+  return 'Khác'
+}
+
 function formatDate(value) {
   if (!value) return ''
   try {
@@ -103,10 +113,11 @@ function KaraokeIcon({ className }) {
 }
 
 function exportVouchersCsv(rows) {
-  const header = ['Mã', 'Ngày nhận', 'Trạng thái', 'Ngày dùng']
+  const header = ['Mã', 'Ngày nhận', 'Thiết bị', 'Trạng thái', 'Ngày dùng']
   const body = rows.map((v) => [
     v.code,
     formatDate(v.created_at),
+    v.device || '',
     v.used_at ? 'Đã dùng' : 'Chưa dùng',
     v.used_at ? formatDate(v.used_at) : '',
   ])
@@ -560,7 +571,7 @@ function GuestPage() {
       const candidate = randomCode()
       const { error: err } = await supabase
         .from('vouchers')
-        .insert({ code: candidate })
+        .insert({ code: candidate, device: detectDevice() })
       if (!err) {
         localStorage.setItem(LOCAL_STORAGE_KEY, candidate)
         setCode(candidate)
@@ -983,6 +994,7 @@ function AdminPage() {
                 <tr>
                   <th>Mã</th>
                   <th>Ngày nhận</th>
+                  <th>Thiết bị</th>
                   <th>Trạng thái</th>
                   <th>Ngày dùng</th>
                 </tr>
@@ -992,6 +1004,7 @@ function AdminPage() {
                   <tr key={v.code}>
                     <td>{v.code}</td>
                     <td>{formatDate(v.created_at)}</td>
+                    <td>{v.device || '-'}</td>
                     <td>
                       <span
                         className={`kt-pill ${v.used_at ? 'kt-pill-used' : 'kt-pill-unused'}`}

@@ -21,17 +21,18 @@ insert into app_settings (key, value) values
 on conflict (key) do nothing;
 
 -- 2. Bảng voucher
--- Drop bảng cũ (nếu project đã có sẵn bảng vouchers với cấu trúc khác,
--- ví dụ thừa cột is_used) để đảm bảo schema khớp chính xác với app.
--- CASCADE sẽ tự xoá luôn các hàm cũ còn phụ thuộc vào vouchers%rowtype.
-drop table if exists vouchers cascade;
-
-create table vouchers (
+-- LƯU Ý: KHÔNG drop bảng này nữa vì production đã có dữ liệu khách thật.
+-- Mọi thay đổi cấu trúc về sau dùng "alter table ... add column if not exists"
+-- để không bao giờ làm mất dữ liệu hiện có.
+create table if not exists vouchers (
   code text primary key,
   created_at timestamptz not null default now(),
   used_at timestamptz
 );
 alter table vouchers enable row level security;
+
+-- Loại thiết bị khách dùng khi nhận voucher (iOS/Android/Windows/macOS/Linux/Khác).
+alter table vouchers add column if not exists device text;
 
 -- RLS policy thôi chưa đủ - Postgres còn cần GRANT quyền ở mức bảng cho role anon.
 grant select, insert on vouchers to anon;
@@ -113,7 +114,8 @@ create or replace function list_vouchers(p_admin_pin text)
 returns table (
   code text,
   created_at timestamptz,
-  used_at timestamptz
+  used_at timestamptz,
+  device text
 )
 language plpgsql
 security definer
@@ -128,7 +130,7 @@ begin
   end if;
 
   return query
-    select v.code, v.created_at, v.used_at
+    select v.code, v.created_at, v.used_at, v.device
     from vouchers v
     order by v.created_at desc;
 end;
