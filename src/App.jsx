@@ -24,6 +24,7 @@ try {
 
 const LOCAL_STORAGE_KEY = 'kt_voucher_code'
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // bỏ O,0,I,1
+const SPARK_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315]
 
 function randomCode() {
   let s = ''
@@ -112,6 +113,7 @@ function GlobalStyles() {
         gap: 16px;
       }
       .kt-capture {
+        position: relative;
         display: flex;
         flex-direction: column;
         gap: 16px;
@@ -400,7 +402,7 @@ function GlobalStyles() {
         background-image: url('/pic.jpg');
         background-size: 540.5% 294.1%;
         background-repeat: no-repeat;
-        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), filter 0.25s ease;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), filter 0.6s ease;
         backface-visibility: hidden;
       }
       .kt-door-leaf-left {
@@ -484,10 +486,109 @@ function GlobalStyles() {
         }
       }
       .kt-voucher-drop {
-        animation: kt-drop-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        animation: kt-drop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
       }
       .kt-voucher-drop-delay {
-        animation-delay: 0.04s;
+        animation-delay: 0.35s;
+      }
+      .kt-gift-card {
+        position: absolute;
+        left: 49.5%;
+        top: 52%;
+        width: min(58%, 220px);
+        padding: 14px;
+        transform: translate(-50%, -50%);
+        z-index: 5;
+        box-shadow:
+          0 0 0 1px rgba(212, 175, 55, 0.5),
+          0 20px 50px rgba(0, 0, 0, 0.6),
+          0 0 44px rgba(212, 175, 55, 0.4);
+        animation: kt-gift-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      .kt-gift-card .kt-badge {
+        font-size: 16px;
+        padding: 6px 14px;
+      }
+      .kt-gift-card .kt-qr-wrap {
+        padding: 8px;
+      }
+      .kt-gift-card .kt-code {
+        font-size: 14px;
+        padding: 8px 10px;
+      }
+      @keyframes kt-gift-pop {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, -50%) scale(0.1) rotate(-14deg);
+        }
+        50% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1.06) rotate(4deg);
+        }
+        72% {
+          transform: translate(-50%, -50%) scale(0.97) rotate(-2deg);
+        }
+        100% {
+          opacity: 1;
+          transform: translate(-50%, -50%) scale(1) rotate(0deg);
+        }
+      }
+      .kt-burst-flash {
+        position: absolute;
+        left: 49.5%;
+        top: 52%;
+        width: 36px;
+        height: 36px;
+        margin: -18px 0 0 -18px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(255, 246, 221, 0.95) 0%,
+          rgba(255, 216, 107, 0.65) 35%,
+          rgba(212, 175, 55, 0) 70%
+        );
+        z-index: 4;
+        pointer-events: none;
+        animation: kt-flash-burst 0.5s ease-out both;
+      }
+      @keyframes kt-flash-burst {
+        0% {
+          transform: scale(0.3);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(9);
+          opacity: 0;
+        }
+      }
+      .kt-spark-wrap {
+        position: absolute;
+        left: 49.5%;
+        top: 52%;
+        width: 0;
+        height: 0;
+        z-index: 4;
+        pointer-events: none;
+      }
+      .kt-spark {
+        position: absolute;
+        left: 0;
+        top: -4px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #fff6dd, #d4af37);
+        animation: kt-spark-fly 0.6s ease-out both;
+      }
+      @keyframes kt-spark-fly {
+        0% {
+          transform: translateX(0) scale(1);
+          opacity: 1;
+        }
+        100% {
+          transform: translateX(92px) scale(0);
+          opacity: 0;
+        }
       }
       .kt-modal-overlay {
         position: fixed;
@@ -663,7 +764,7 @@ function GuestPage() {
     if (doorState !== 'closed') return
     setDoorState('opening')
     const ok = await handleGetVoucher()
-    setTimeout(() => setDoorState(ok ? 'open' : 'closed'), 250)
+    setTimeout(() => setDoorState(ok ? 'open' : 'closed'), 600)
   }
 
   async function handleCopy() {
@@ -722,27 +823,35 @@ function GuestPage() {
             )}
           </div>
 
-          {!doorRevealed && (
+          {doorRevealed && (
             <>
-              <p className="kt-door-hint">
-                {doorState === 'closed' ? '👆 Mở cửa để nhận quà' : 'Đang mở cửa...'}
-              </p>
-              {error && (
-                <p style={{ color: '#e74c3c', fontSize: 13, textAlign: 'center' }}>{error}</p>
-              )}
+              <span className="kt-burst-flash" />
+              {SPARK_ANGLES.map((angle) => (
+                <span key={angle} className="kt-spark-wrap" style={{ transform: `rotate(${angle}deg)` }}>
+                  <span className="kt-spark" />
+                </span>
+              ))}
+              <div className="kt-card kt-center kt-gift-card">
+                <span className="kt-badge">-{CONFIG.discountPercent}%</span>
+                <div className="kt-qr-wrap">
+                  <QRCode value={code} size={130} />
+                </div>
+                <div className="kt-code">{code}</div>
+              </div>
             </>
           )}
-
-          {doorRevealed && (
-            <div className="kt-card kt-center kt-voucher-drop">
-              <span className="kt-badge">-{CONFIG.discountPercent}%</span>
-              <div className="kt-qr-wrap">
-                <QRCode value={code} size={180} />
-              </div>
-              <div className="kt-code">{code}</div>
-            </div>
-          )}
         </div>
+
+        {!doorRevealed && (
+          <>
+            <p className="kt-door-hint">
+              {doorState === 'closed' ? '👆 Mở cửa để nhận quà' : 'Đang mở cửa...'}
+            </p>
+            {error && (
+              <p style={{ color: '#e74c3c', fontSize: 13, textAlign: 'center' }}>{error}</p>
+            )}
+          </>
+        )}
 
         {doorRevealed && (
           <div className="kt-card kt-center kt-voucher-drop kt-voucher-drop-delay">
