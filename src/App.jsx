@@ -400,7 +400,7 @@ function GlobalStyles() {
         background-image: url('/pic.jpg');
         background-size: 540.5% 294.1%;
         background-repeat: no-repeat;
-        transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1), filter 0.75s ease;
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), filter 0.25s ease;
         backface-visibility: hidden;
       }
       .kt-door-leaf-left {
@@ -484,10 +484,10 @@ function GlobalStyles() {
         }
       }
       .kt-voucher-drop {
-        animation: kt-drop-in 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        animation: kt-drop-in 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) both;
       }
       .kt-voucher-drop-delay {
-        animation-delay: 0.12s;
+        animation-delay: 0.04s;
       }
       .kt-modal-overlay {
         position: fixed;
@@ -663,7 +663,7 @@ function GuestPage() {
     if (doorState !== 'closed') return
     setDoorState('opening')
     const ok = await handleGetVoucher()
-    setTimeout(() => setDoorState(ok ? 'open' : 'closed'), 750)
+    setTimeout(() => setDoorState(ok ? 'open' : 'closed'), 250)
   }
 
   async function handleCopy() {
