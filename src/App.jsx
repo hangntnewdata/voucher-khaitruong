@@ -760,11 +760,14 @@ function GuestPage() {
     return createNew()
   }
 
-  async function handleDoorClick() {
+  function handleDoorClick() {
     if (doorState !== 'closed') return
     setDoorState('opening')
-    const ok = await handleGetVoucher()
-    setTimeout(() => setDoorState(ok ? 'open' : 'closed'), 600)
+    const voucherReady = handleGetVoucher()
+    const animationDone = new Promise((resolve) => setTimeout(resolve, 600))
+    Promise.all([voucherReady, animationDone]).then(([ok]) => {
+      setDoorState(ok ? 'open' : 'closed')
+    })
   }
 
   async function handleCopy() {
