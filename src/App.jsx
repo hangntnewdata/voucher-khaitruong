@@ -713,7 +713,7 @@ function GuestPage() {
               </button>
             </div>
             <p className="kt-door-hint">
-              {doorState === 'closed' ? '👆 Bấm vào cửa để nhận voucher' : 'Đang mở cửa...'}
+              {doorState === 'closed' ? '👆 Mở cửa để nhận quà' : 'Đang mở cửa...'}
             </p>
             {error && (
               <p style={{ color: '#e74c3c', fontSize: 13, textAlign: 'center' }}>{error}</p>
