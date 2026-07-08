@@ -386,10 +386,40 @@ function GlobalStyles() {
         border-radius: 20px;
         overflow: hidden;
         border: 1px solid #2a2f3b;
+        perspective: 1100px;
       }
       .kt-door-img {
         width: 100%;
         display: block;
+      }
+      .kt-door-leaf {
+        position: absolute;
+        top: 35%;
+        height: 34%;
+        width: 18.5%;
+        background-image: url('/pic.jpg');
+        background-size: 540.5% 294.1%;
+        background-repeat: no-repeat;
+        transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1), filter 0.75s ease;
+        backface-visibility: hidden;
+      }
+      .kt-door-leaf-left {
+        left: 31%;
+        background-position: 38% 53%;
+        transform-origin: 0% 50%;
+      }
+      .kt-door-leaf-right {
+        left: 49.5%;
+        background-position: 60.7% 53%;
+        transform-origin: 100% 50%;
+      }
+      .kt-door-open .kt-door-leaf-left {
+        transform: rotateY(-115deg);
+        filter: brightness(0.55);
+      }
+      .kt-door-open .kt-door-leaf-right {
+        transform: rotateY(115deg);
+        filter: brightness(0.55);
       }
       .kt-door-hotspot {
         position: absolute;
@@ -555,11 +585,12 @@ function useBeeper() {
 // ============== TRANG KHÁCH ==============
 function GuestPage() {
   const [code, setCode] = useState(null)
-  const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [downloading, setDownloading] = useState(false)
   const [previewSrc, setPreviewSrc] = useState(null)
+  const [doorState, setDoorState] = useState('closed')
   const captureRef = useRef(null)
+  const doorRevealed = doorState === 'open' && !!code
 
   async function loadExisting(existingCode) {
     const { data, error: err } = await supabase
@@ -569,9 +600,10 @@ function GuestPage() {
       .maybeSingle()
     if (err || !data) {
       setError('Không tìm thấy mã của bạn, vui lòng thử lại.')
-      return
+      return false
     }
     setCode(data.code)
+    return true
   }
 
   async function createNew() {
@@ -583,30 +615,35 @@ function GuestPage() {
       if (!err) {
         localStorage.setItem(LOCAL_STORAGE_KEY, candidate)
         setCode(candidate)
-        return
+        return true
       }
       if (!isUniqueViolation(err)) {
         setError('Có lỗi xảy ra, vui lòng thử lại sau.')
-        return
+        return false
       }
     }
     setError('Có lỗi xảy ra, vui lòng thử lại sau.')
+    return false
   }
 
   async function handleGetVoucher() {
     if (!supabase) {
       setError('Chưa cấu hình Supabase (xem CONFIG ở đầu App.jsx).')
-      return
+      return false
     }
-    setLoading(true)
     setError('')
     const existing = localStorage.getItem(LOCAL_STORAGE_KEY)
     if (existing) {
-      await loadExisting(existing)
-    } else {
-      await createNew()
+      return loadExisting(existing)
     }
-    setLoading(false)
+    return createNew()
+  }
+
+  async function handleDoorClick() {
+    if (doorState !== 'closed') return
+    setDoorState('opening')
+    const ok = await handleGetVoucher()
+    setTimeout(() => setDoorState(ok ? 'open' : 'closed'), 750)
   }
 
   async function handleCopy() {
@@ -648,7 +685,7 @@ function GuestPage() {
     <div className="kt-app">
       <div className="kt-container">
         <div ref={captureRef} className="kt-capture">
-          {code && (
+          {doorRevealed && (
             <div className="kt-card kt-center">
               <span className="kt-badge">-{CONFIG.discountPercent}%</span>
               <div className="kt-qr-wrap">
@@ -659,22 +696,24 @@ function GuestPage() {
           )}
         </div>
 
-        {!code && (
+        {!doorRevealed && (
           <>
-            <div className="kt-door-wrap">
+            <div className={`kt-door-wrap ${doorState !== 'closed' ? 'kt-door-open' : ''}`}>
               <img src="/pic.jpg" alt={CONFIG.storeName} className="kt-door-img" />
+              <div className="kt-door-leaf kt-door-leaf-left" />
+              <div className="kt-door-leaf kt-door-leaf-right" />
               <button
                 type="button"
                 className="kt-door-hotspot"
-                onClick={handleGetVoucher}
-                disabled={loading}
+                onClick={handleDoorClick}
+                disabled={doorState !== 'closed'}
                 aria-label="Bấm vào cửa để nhận voucher"
               >
                 <span className="kt-door-glow" />
               </button>
             </div>
             <p className="kt-door-hint">
-              {loading ? 'Đang mở cửa...' : '👆 Bấm vào cửa để nhận voucher'}
+              {doorState === 'closed' ? '👆 Bấm vào cửa để nhận voucher' : 'Đang mở cửa...'}
             </p>
             {error && (
               <p style={{ color: '#e74c3c', fontSize: 13, textAlign: 'center' }}>{error}</p>
@@ -682,7 +721,7 @@ function GuestPage() {
           </>
         )}
 
-        {code && (
+        {doorRevealed && (
           <div className="kt-card kt-center">
             <button className="kt-btn kt-btn-secondary" onClick={handleCopy}>
               Sao chép mã
