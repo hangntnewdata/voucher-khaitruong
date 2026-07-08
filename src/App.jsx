@@ -64,62 +64,6 @@ function isUniqueViolation(error) {
   return error.code === '23505' || /duplicate key/i.test(error.message || '')
 }
 
-function KaraokeIcon({ className }) {
-  return (
-    <svg className={className} viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="kt-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#fff2cc" />
-          <stop offset="50%" stopColor="#d4af37" />
-          <stop offset="100%" stopColor="#9c7a26" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M30 96 q8 -16 24 -16"
-        stroke="url(#kt-gold-grad)"
-        strokeWidth="5"
-        strokeLinecap="round"
-        fill="none"
-        opacity="0.55"
-      />
-      <path
-        d="M170 96 q-8 -16 -24 -16"
-        stroke="url(#kt-gold-grad)"
-        strokeWidth="5"
-        strokeLinecap="round"
-        fill="none"
-        opacity="0.55"
-      />
-      <rect
-        x="28"
-        y="76"
-        width="144"
-        height="104"
-        rx="20"
-        fill="#181c25"
-        stroke="url(#kt-gold-grad)"
-        strokeWidth="4"
-      />
-      <circle cx="68" cy="128" r="24" fill="none" stroke="url(#kt-gold-grad)" strokeWidth="4" />
-      <circle cx="68" cy="128" r="9" fill="url(#kt-gold-grad)" />
-      <circle cx="134" cy="153" r="15" fill="none" stroke="url(#kt-gold-grad)" strokeWidth="3.5" />
-      <circle cx="134" cy="153" r="5" fill="url(#kt-gold-grad)" />
-      <rect x="120" y="92" width="28" height="10" rx="5" fill="url(#kt-gold-grad)" opacity="0.85" />
-      <rect x="86" y="8" width="28" height="58" rx="14" fill="url(#kt-gold-grad)" />
-      <rect x="92" y="18" width="16" height="6" rx="3" fill="#181c25" opacity="0.45" />
-      <rect x="92" y="30" width="16" height="6" rx="3" fill="#181c25" opacity="0.45" />
-      <path
-        d="M70 48 a30 30 0 0 0 60 0"
-        stroke="url(#kt-gold-grad)"
-        strokeWidth="6"
-        fill="none"
-        strokeLinecap="round"
-      />
-      <line x1="100" y1="78" x2="100" y2="94" stroke="url(#kt-gold-grad)" strokeWidth="6" strokeLinecap="round" />
-    </svg>
-  )
-}
-
 function exportVouchersCsv(rows) {
   const header = ['Mã', 'Ngày nhận', 'Thiết bị', 'Trạng thái', 'Ngày dùng']
   const body = rows.map((v) => [
@@ -190,107 +134,6 @@ function GlobalStyles() {
         text-align: center;
         color: #9aa0ad;
         font-size: 15px;
-      }
-      .kt-hero {
-        position: relative;
-        overflow: hidden;
-        text-align: center;
-        padding: clamp(28px, 8vw, 44px) 16px clamp(26px, 7vw, 38px);
-        background:
-          radial-gradient(120% 90% at 50% -15%, rgba(212, 175, 55, 0.22), transparent 60%),
-          linear-gradient(180deg, #181c25 0%, #14171e 100%);
-        border: 1px solid #2a2f3b;
-        border-radius: 28px;
-      }
-      .kt-hero::before,
-      .kt-hero::after {
-        content: '';
-        position: absolute;
-        border-radius: 50%;
-        filter: blur(30px);
-        pointer-events: none;
-        opacity: 0.5;
-      }
-      .kt-hero::before {
-        width: clamp(180px, 60vw, 320px);
-        height: clamp(180px, 60vw, 320px);
-        top: -18%;
-        left: 50%;
-        transform: translateX(-50%);
-        background: radial-gradient(circle, rgba(212, 175, 55, 0.45), transparent 70%);
-      }
-      .kt-hero::after {
-        width: 140px;
-        height: 140px;
-        bottom: -40px;
-        right: -30px;
-        background: radial-gradient(circle, rgba(255, 105, 180, 0.18), transparent 70%);
-      }
-      .kt-coming-soon {
-        position: relative;
-        display: block;
-        font-size: clamp(22px, 7.5vw, 38px);
-        font-weight: 900;
-        letter-spacing: 3px;
-        color: #fff3c4;
-        text-shadow: 0 0 14px rgba(255, 216, 107, 0.95), 0 0 30px rgba(212, 175, 55, 0.7);
-        margin-bottom: clamp(6px, 2vw, 10px);
-        animation: kt-blink 1s steps(1, end) infinite;
-      }
-      .kt-capturing .kt-coming-soon {
-        animation: none;
-        opacity: 1;
-      }
-      @keyframes kt-blink {
-        0%, 49% {
-          opacity: 1;
-        }
-        50%, 100% {
-          opacity: 0.25;
-        }
-      }
-      .kt-hero-icon {
-        position: relative;
-        display: block;
-        width: clamp(190px, 52vw, 300px);
-        height: auto;
-        margin: 0 auto clamp(8px, 2vw, 14px);
-        filter: drop-shadow(0 10px 28px rgba(212, 175, 55, 0.45));
-      }
-      .kt-hero-name {
-        position: relative;
-        font-size: clamp(34px, 10.5vw, 58px);
-        font-weight: 900;
-        line-height: 1.04;
-        margin: 0;
-        letter-spacing: -0.5px;
-        background: linear-gradient(135deg, #fff6dd 0%, #e9c558 35%, #d4af37 65%, #a67c1f 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 2px 24px rgba(212, 175, 55, 0.25);
-      }
-      .kt-hero-pill {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: clamp(12px, 3vw, 18px);
-        padding: 9px 20px;
-        border-radius: 999px;
-        background: rgba(212, 175, 55, 0.12);
-        border: 1px solid rgba(212, 175, 55, 0.45);
-        color: #f0d98c;
-        font-size: clamp(12.5px, 3.4vw, 15px);
-        font-weight: 700;
-        letter-spacing: 0.2px;
-      }
-      .kt-hero-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        background: #f0d98c;
-        box-shadow: 0 0 8px 2px rgba(240, 217, 140, 0.7);
       }
       .kt-gold {
         color: #d4af37;
@@ -805,16 +648,6 @@ function GuestPage() {
     <div className="kt-app">
       <div className="kt-container">
         <div ref={captureRef} className="kt-capture">
-          <div className="kt-hero">
-            <span className="kt-coming-soon">COMING SOON</span>
-            <KaraokeIcon className="kt-hero-icon" />
-            <h1 className="kt-hero-name">{CONFIG.storeName}</h1>
-            <span className="kt-hero-pill">
-              <span className="kt-hero-dot" />
-              {CONFIG.tagline} · {CONFIG.openingText}
-            </span>
-          </div>
-
           {code && (
             <div className="kt-card kt-center">
               <span className="kt-badge">-{CONFIG.discountPercent}%</span>
