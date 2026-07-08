@@ -469,6 +469,26 @@ function GlobalStyles() {
         text-shadow: 0 0 10px rgba(255, 216, 107, 0.8), 0 0 20px rgba(212, 175, 55, 0.5);
         animation: kt-pulse 1.2s ease-in-out infinite;
       }
+      @keyframes kt-drop-in {
+        0% {
+          opacity: 0;
+          transform: translateY(-48px) scale(0.96);
+        }
+        60% {
+          opacity: 1;
+          transform: translateY(8px) scale(1.01);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .kt-voucher-drop {
+        animation: kt-drop-in 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+      }
+      .kt-voucher-drop-delay {
+        animation-delay: 0.12s;
+      }
       .kt-modal-overlay {
         position: fixed;
         inset: 0;
@@ -685,23 +705,11 @@ function GuestPage() {
     <div className="kt-app">
       <div className="kt-container">
         <div ref={captureRef} className="kt-capture">
-          {doorRevealed && (
-            <div className="kt-card kt-center">
-              <span className="kt-badge">-{CONFIG.discountPercent}%</span>
-              <div className="kt-qr-wrap">
-                <QRCode value={code} size={180} />
-              </div>
-              <div className="kt-code">{code}</div>
-            </div>
-          )}
-        </div>
-
-        {!doorRevealed && (
-          <>
-            <div className={`kt-door-wrap ${doorState !== 'closed' ? 'kt-door-open' : ''}`}>
-              <img src="/pic.jpg" alt={CONFIG.storeName} className="kt-door-img" />
-              <div className="kt-door-leaf kt-door-leaf-left" />
-              <div className="kt-door-leaf kt-door-leaf-right" />
+          <div className={`kt-door-wrap ${doorState !== 'closed' ? 'kt-door-open' : ''}`}>
+            <img src="/pic.jpg" alt={CONFIG.storeName} className="kt-door-img" />
+            <div className="kt-door-leaf kt-door-leaf-left" />
+            <div className="kt-door-leaf kt-door-leaf-right" />
+            {!doorRevealed && (
               <button
                 type="button"
                 className="kt-door-hotspot"
@@ -711,18 +719,33 @@ function GuestPage() {
               >
                 <span className="kt-door-glow" />
               </button>
-            </div>
-            <p className="kt-door-hint">
-              {doorState === 'closed' ? '👆 Mở cửa để nhận quà' : 'Đang mở cửa...'}
-            </p>
-            {error && (
-              <p style={{ color: '#e74c3c', fontSize: 13, textAlign: 'center' }}>{error}</p>
             )}
-          </>
-        )}
+          </div>
+
+          {!doorRevealed && (
+            <>
+              <p className="kt-door-hint">
+                {doorState === 'closed' ? '👆 Mở cửa để nhận quà' : 'Đang mở cửa...'}
+              </p>
+              {error && (
+                <p style={{ color: '#e74c3c', fontSize: 13, textAlign: 'center' }}>{error}</p>
+              )}
+            </>
+          )}
+
+          {doorRevealed && (
+            <div className="kt-card kt-center kt-voucher-drop">
+              <span className="kt-badge">-{CONFIG.discountPercent}%</span>
+              <div className="kt-qr-wrap">
+                <QRCode value={code} size={180} />
+              </div>
+              <div className="kt-code">{code}</div>
+            </div>
+          )}
+        </div>
 
         {doorRevealed && (
-          <div className="kt-card kt-center">
+          <div className="kt-card kt-center kt-voucher-drop kt-voucher-drop-delay">
             <button className="kt-btn kt-btn-secondary" onClick={handleCopy}>
               Sao chép mã
             </button>
