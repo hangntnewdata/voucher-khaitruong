@@ -538,6 +538,64 @@ function GlobalStyles() {
         opacity: 0.6;
         cursor: not-allowed;
       }
+      .kt-door-wrap {
+        position: relative;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid #2a2f3b;
+      }
+      .kt-door-img {
+        width: 100%;
+        display: block;
+      }
+      .kt-door-hotspot {
+        position: absolute;
+        left: 31%;
+        top: 35%;
+        width: 37%;
+        height: 34%;
+        border: none;
+        background: transparent;
+        padding: 0;
+        margin: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .kt-door-hotspot:disabled {
+        cursor: default;
+      }
+      .kt-door-glow {
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+        box-shadow: 0 0 0 2px rgba(255, 216, 107, 0.8), 0 0 22px 6px rgba(212, 175, 55, 0.55);
+        animation: kt-door-pulse 1.6s ease-in-out infinite;
+      }
+      .kt-door-hotspot:disabled .kt-door-glow {
+        animation: none;
+        box-shadow: none;
+      }
+      @keyframes kt-door-pulse {
+        0%, 100% {
+          opacity: 0.5;
+          transform: scale(0.97);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+      .kt-door-hint {
+        margin: 10px 0 0;
+        text-align: center;
+        font-size: clamp(14px, 4vw, 16px);
+        font-weight: 800;
+        color: #ffd86b;
+        text-shadow: 0 0 10px rgba(255, 216, 107, 0.8), 0 0 20px rgba(212, 175, 55, 0.5);
+        animation: kt-pulse 1.2s ease-in-out infinite;
+      }
       .kt-modal-overlay {
         position: fixed;
         inset: 0;
@@ -769,15 +827,26 @@ function GuestPage() {
         </div>
 
         {!code && (
-          <div className="kt-card kt-center">
-            <p className="kt-muted" style={{ textAlign: 'center' }}>
-              Nhận voucher giảm giá ngay để dùng trong tuần lễ khai trương!
+          <>
+            <div className="kt-door-wrap">
+              <img src="/pic.jpg" alt={CONFIG.storeName} className="kt-door-img" />
+              <button
+                type="button"
+                className="kt-door-hotspot"
+                onClick={handleGetVoucher}
+                disabled={loading}
+                aria-label="Bấm vào cửa để nhận voucher"
+              >
+                <span className="kt-door-glow" />
+              </button>
+            </div>
+            <p className="kt-door-hint">
+              {loading ? 'Đang mở cửa...' : '👆 Bấm vào cửa để nhận voucher'}
             </p>
-            <button className="kt-btn" onClick={handleGetVoucher} disabled={loading}>
-              {loading ? 'Đang xử lý...' : 'Bấm để nhận voucher'}
-            </button>
-            {error && <p style={{ color: '#e74c3c', fontSize: 13 }}>{error}</p>}
-          </div>
+            {error && (
+              <p style={{ color: '#e74c3c', fontSize: 13, textAlign: 'center' }}>{error}</p>
+            )}
+          </>
         )}
 
         {code && (
