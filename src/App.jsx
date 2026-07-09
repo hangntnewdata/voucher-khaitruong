@@ -444,7 +444,7 @@ function GlobalStyles() {
         background-image: url('/pic.jpg');
         background-size: 540.5% 294.1%;
         background-repeat: no-repeat;
-        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s ease;
+        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), filter 0.6s ease;
         backface-visibility: hidden;
       }
       .kt-door-leaf-left {
@@ -531,7 +531,7 @@ function GlobalStyles() {
         animation: kt-drop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
       }
       .kt-voucher-drop-delay {
-        animation-delay: 0.35s;
+        animation-delay: 0.12s;
       }
       .kt-gift-card {
         position: absolute;
@@ -545,7 +545,7 @@ function GlobalStyles() {
           0 0 0 1px rgba(212, 175, 55, 0.5),
           0 20px 50px rgba(0, 0, 0, 0.6),
           0 0 44px rgba(212, 175, 55, 0.4);
-        animation: kt-gift-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+        animation: kt-gift-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
       }
       .kt-gift-card .kt-badge {
         font-size: 16px;
@@ -591,7 +591,7 @@ function GlobalStyles() {
         );
         z-index: 4;
         pointer-events: none;
-        animation: kt-flash-burst 0.5s ease-out both;
+        animation: kt-flash-burst 0.3s ease-out both;
       }
       @keyframes kt-flash-burst {
         0% {
@@ -620,7 +620,7 @@ function GlobalStyles() {
         height: 8px;
         border-radius: 50%;
         background: radial-gradient(circle, #fff6dd, #d4af37);
-        animation: kt-spark-fly 0.6s ease-out both;
+        animation: kt-spark-fly 0.35s ease-out both;
       }
       @keyframes kt-spark-fly {
         0% {
@@ -806,7 +806,7 @@ function GuestPage() {
     if (doorState !== 'closed') return
     setDoorState('opening')
     const voucherReady = handleGetVoucher()
-    const animationDone = new Promise((resolve) => setTimeout(resolve, 400))
+    const animationDone = new Promise((resolve) => setTimeout(resolve, 600))
     Promise.all([voucherReady, animationDone]).then(([ok]) => {
       setDoorState(ok ? 'open' : 'closed')
     })
