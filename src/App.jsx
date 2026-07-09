@@ -103,6 +103,7 @@ function GlobalStyles() {
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
         padding: 24px 16px 48px;
       }
       .kt-container {
@@ -111,6 +112,47 @@ function GlobalStyles() {
         display: flex;
         flex-direction: column;
         gap: 16px;
+      }
+      .kt-brand-header {
+        text-align: center;
+      }
+      .kt-brand-eyebrow {
+        margin: 0 0 6px;
+        font-size: clamp(11px, 3.2vw, 13px);
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        color: #d4af37;
+      }
+      .kt-brand-name {
+        margin: 0;
+        font-size: clamp(30px, 9.5vw, 48px);
+        font-weight: 900;
+        line-height: 1.05;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #fff6dd 0%, #e9c558 35%, #d4af37 65%, #a67c1f 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 2px 24px rgba(212, 175, 55, 0.25);
+      }
+      .kt-brand-address {
+        margin: 8px 0 0;
+        font-size: clamp(13px, 3.6vw, 15px);
+        color: #c9ccd3;
+        font-weight: 600;
+      }
+      .kt-brand-date {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 10px;
+        padding: 8px 18px;
+        border-radius: 999px;
+        background: rgba(212, 175, 55, 0.12);
+        border: 1px solid rgba(212, 175, 55, 0.45);
+        color: #f0d98c;
+        font-size: clamp(12.5px, 3.4vw, 14px);
+        font-weight: 700;
       }
       .kt-capture {
         position: relative;
@@ -808,6 +850,13 @@ function GuestPage() {
   return (
     <div className="kt-app">
       <div className="kt-container">
+        <div className="kt-brand-header">
+          <p className="kt-brand-eyebrow">KHU PHỨC HỢP SELF-BOOTH &amp; MUSIC BOX ĐẦU TIÊN TẠI CẦN THƠ</p>
+          <h1 className="kt-brand-name">ANTI MORNING</h1>
+          <p className="kt-brand-address">HẺM 51, ĐƯỜNG 3/2, NINH KIỀU, CẦN THƠ</p>
+          <span className="kt-brand-date">GRAND OPENING: 28/7/2026</span>
+        </div>
+
         <div ref={captureRef} className="kt-capture">
           <div className={`kt-door-wrap ${doorState !== 'closed' ? 'kt-door-open' : ''}`}>
             <img src="/pic.jpg" alt={CONFIG.storeName} className="kt-door-img" />
