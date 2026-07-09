@@ -755,6 +755,14 @@ function GuestPage() {
   const captureRef = useRef(null)
   const doorRevealed = doorState === 'open' && !!code
 
+  useEffect(() => {
+    if (!supabase) return
+    // "Làm nóng" kết nối tới Supabase ngay khi vào trang, để lúc khách bấm
+    // cửa không phải chờ round-trip đầu tiên (DNS/TLS + cold start) nữa.
+    // Query builder của supabase-js chỉ gửi request khi được .then()/await.
+    supabase.from('vouchers').select('code', { head: true, count: 'exact' }).limit(1).then(() => {})
+  }, [])
+
   async function loadExisting(existingCode) {
     const { data, error: err } = await supabase
       .from('vouchers')
