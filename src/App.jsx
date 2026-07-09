@@ -444,7 +444,7 @@ function GlobalStyles() {
         background-image: url('/pic.jpg');
         background-size: 540.5% 294.1%;
         background-repeat: no-repeat;
-        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), filter 0.6s ease;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), filter 0.4s ease;
         backface-visibility: hidden;
       }
       .kt-door-leaf-left {
@@ -806,7 +806,7 @@ function GuestPage() {
     if (doorState !== 'closed') return
     setDoorState('opening')
     const voucherReady = handleGetVoucher()
-    const animationDone = new Promise((resolve) => setTimeout(resolve, 600))
+    const animationDone = new Promise((resolve) => setTimeout(resolve, 400))
     Promise.all([voucherReady, animationDone]).then(([ok]) => {
       setDoorState(ok ? 'open' : 'closed')
     })
