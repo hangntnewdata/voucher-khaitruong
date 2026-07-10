@@ -293,6 +293,7 @@ function GlobalStyles() {
       }
       .kt-stage-tagline-sub {
         margin: 0 0 18px;
+        font-size: clamp(17px, 4.9vw, 22px);
       }
       .kt-script-accent {
         font-family: 'Dancing Script', cursive;
@@ -310,7 +311,7 @@ function GlobalStyles() {
         font-size: clamp(19px, 5.6vw, 25px);
         letter-spacing: 0.5px;
         color: #ffe9a8;
-        padding: 6px 16px;
+        padding: 6px 2px;
         margin: 4px 0;
         border-radius: 12px;
         background: rgba(6, 3, 0, 0.85);
