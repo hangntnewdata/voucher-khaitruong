@@ -319,6 +319,9 @@ function GlobalStyles() {
         -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.6);
         text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9);
       }
+      .kt-btn.kt-claim-btn {
+        width: 75%;
+      }
       .kt-stage-error {
         margin: 10px 0 0;
         color: #ff8a80;
