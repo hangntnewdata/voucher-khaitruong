@@ -316,11 +316,6 @@ function GlobalStyles() {
         -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.6);
         text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9);
       }
-      .kt-btn.kt-claim-btn {
-        width: 100vw;
-        margin: 0 calc(-50vw + 50%);
-        border-radius: 0;
-      }
       .kt-stage-error {
         margin: 10px 0 0;
         color: #ff8a80;
