@@ -26,14 +26,20 @@ const LOCAL_STORAGE_KEY = 'kt_voucher_code'
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // bỏ O,0,I,1
 const SPARK_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315]
 const BLING_SPARKLES = [
-  { top: '30%', left: '16%', delay: '0s', size: 14 },
-  { top: '24%', left: '80%', delay: '0.5s', size: 10 },
-  { top: '42%', left: '88%', delay: '1.1s', size: 12 },
-  { top: '68%', left: '10%', delay: '1.6s', size: 16 },
-  { top: '38%', left: '48%', delay: '0.8s', size: 9 },
-  { top: '72%', left: '84%', delay: '0.3s', size: 12 },
-  { top: '60%', left: '30%', delay: '2s', size: 10 },
-  { top: '20%', left: '48%', delay: '1.4s', size: 11 },
+  { top: '12%', left: '14%', delay: '0s', size: 13, dur: '2s' },
+  { top: '8%', left: '50%', delay: '0.7s', size: 10, dur: '2.4s' },
+  { top: '14%', left: '84%', delay: '1.3s', size: 15, dur: '2.1s' },
+  { top: '30%', left: '16%', delay: '0.4s', size: 14, dur: '1.9s' },
+  { top: '24%', left: '80%', delay: '1.6s', size: 10, dur: '2.3s' },
+  { top: '42%', left: '88%', delay: '0.9s', size: 12, dur: '2s' },
+  { top: '68%', left: '10%', delay: '0.2s', size: 16, dur: '2.5s' },
+  { top: '38%', left: '48%', delay: '1.1s', size: 9, dur: '1.8s' },
+  { top: '72%', left: '84%', delay: '1.9s', size: 12, dur: '2.2s' },
+  { top: '60%', left: '30%', delay: '0.6s', size: 10, dur: '2s' },
+  { top: '20%', left: '48%', delay: '1.4s', size: 11, dur: '2.4s' },
+  { top: '55%', left: '68%', delay: '0.1s', size: 13, dur: '2.1s' },
+  { top: '80%', left: '50%', delay: '1.7s', size: 11, dur: '2.3s' },
+  { top: '48%', left: '8%', delay: '2.1s', size: 9, dur: '1.9s' },
 ]
 
 function randomCode() {
@@ -150,6 +156,10 @@ function GlobalStyles() {
         object-fit: cover;
         display: block;
       }
+      .kt-scene .kt-curtain-bg {
+        animation: kt-curtain-sway 7s ease-in-out infinite;
+        transform-origin: center top;
+      }
       .kt-curtain-veil {
         position: absolute;
         inset: 0;
@@ -205,22 +215,58 @@ function GlobalStyles() {
       }
       .kt-bling {
         position: absolute;
-        color: #fff3c4;
-        text-shadow: 0 0 6px rgba(255, 216, 107, 0.95), 0 0 14px rgba(255, 216, 107, 0.7);
+        color: #fffbe8;
+        text-shadow: 0 0 8px rgba(255, 224, 130, 1), 0 0 18px rgba(255, 216, 107, 0.9),
+          0 0 28px rgba(255, 190, 60, 0.6);
         opacity: 0;
         pointer-events: none;
         z-index: 3;
-        animation: kt-twinkle 2.4s ease-in-out infinite;
+        animation-name: kt-twinkle;
+        animation-timing-function: ease-in-out;
+        animation-iteration-count: infinite;
       }
       @keyframes kt-twinkle {
         0%,
         100% {
           opacity: 0;
-          transform: scale(0.4) rotate(0deg);
+          transform: scale(0.3) rotate(0deg);
         }
         50% {
           opacity: 1;
-          transform: scale(1.15) rotate(18deg);
+          transform: scale(1.3) rotate(20deg);
+        }
+      }
+      .kt-curtain-shimmer {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: linear-gradient(
+          115deg,
+          transparent 20%,
+          rgba(255, 235, 190, 0.28) 40%,
+          rgba(255, 255, 255, 0.65) 50%,
+          rgba(255, 235, 190, 0.28) 60%,
+          transparent 80%
+        );
+        background-size: 260% 260%;
+        mix-blend-mode: overlay;
+        animation: kt-shimmer-sweep 3.8s ease-in-out infinite;
+      }
+      @keyframes kt-shimmer-sweep {
+        0% {
+          background-position: 180% -20%;
+        }
+        100% {
+          background-position: -80% 20%;
+        }
+      }
+      @keyframes kt-curtain-sway {
+        0%,
+        100% {
+          transform: scale(1) skewX(0deg);
+        }
+        50% {
+          transform: scale(1.012) skewX(0.35deg);
         }
       }
       .kt-stage-content {
@@ -945,6 +991,7 @@ function GuestPage() {
             alt=""
             className={`kt-curtain-veil ${screen === 'stage' ? 'kt-curtain-veil-open' : ''}`}
           />
+          <div className="kt-curtain-shimmer" />
 
           {screen === 'curtain' && (
             <button
@@ -961,7 +1008,13 @@ function GuestPage() {
                 <span
                   key={i}
                   className="kt-bling"
-                  style={{ top: s.top, left: s.left, fontSize: s.size, animationDelay: s.delay }}
+                  style={{
+                    top: s.top,
+                    left: s.left,
+                    fontSize: s.size,
+                    animationDelay: s.delay,
+                    animationDuration: s.dur,
+                  }}
                 >
                   ✦
                 </span>
