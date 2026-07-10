@@ -542,8 +542,8 @@ function GlobalStyles() {
         position: absolute;
         left: 50%;
         top: 56%;
-        width: min(37%, 150px);
-        padding: 10px;
+        width: min(25%, 100px);
+        padding: 7px;
         transform: translate(-50%, -50%);
         z-index: 5;
         box-shadow:
@@ -553,15 +553,15 @@ function GlobalStyles() {
         animation: kt-gift-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
       }
       .kt-gift-card .kt-badge {
-        font-size: 12px;
-        padding: 4px 10px;
+        font-size: 9px;
+        padding: 3px 8px;
       }
       .kt-gift-card .kt-qr-wrap {
-        padding: 6px;
+        padding: 4px;
       }
       .kt-gift-card .kt-code {
-        font-size: 10px;
-        padding: 5px 6px;
+        font-size: 8px;
+        padding: 4px 5px;
       }
       @keyframes kt-gift-pop {
         0% {
@@ -946,7 +946,7 @@ function GuestPage() {
                 <div className="kt-card kt-center kt-gift-card">
                   <span className="kt-badge">-{CONFIG.discountPercent}%</span>
                   <div className="kt-qr-wrap">
-                    <QRCode value={code} size={80} />
+                    <QRCode value={code} size={54} />
                   </div>
                   <div className="kt-code">{code}</div>
                 </div>
