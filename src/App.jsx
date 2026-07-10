@@ -220,6 +220,16 @@ function GlobalStyles() {
           0 0 12px rgba(0, 0, 0, 0.75),
           0 2px 5px rgba(0, 0, 0, 0.95);
       }
+      .kt-tagline-gold {
+        display: inline-block;
+        font-weight: 800;
+        color: #ffd86b;
+        padding: 3px 12px;
+        border-radius: 10px;
+        background: rgba(10, 6, 0, 0.45);
+        -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.6);
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9);
+      }
       .kt-claim-btn {
         width: auto;
         min-width: 220px;
@@ -901,7 +911,7 @@ function GuestPage() {
           {screen === 'stage' && (
             <div className="kt-stage-content">
               <p className="kt-stage-tagline">
-                Hát hết mình, tạo dáng hết cỡ
+                <span className="kt-tagline-gold">Hát hết mình, tạo dáng hết cỡ</span>
                 <br />
                 tại tổ hợp <span className="kt-script-accent">self-booth &amp; music box</span> đầu tiên tại Cần
                 Thơ
