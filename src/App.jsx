@@ -198,22 +198,27 @@ function GlobalStyles() {
         left: 50%;
         bottom: 7%;
         transform: translateX(-50%);
-        width: 88%;
+        width: 94%;
         max-width: 420px;
         text-align: center;
       }
       .kt-stage-tagline {
         margin: 0 0 18px;
         font-family: 'Playfair Display', 'Times New Roman', serif;
-        font-size: clamp(15px, 4.4vw, 19px);
-        line-height: 1.55;
+        font-size: clamp(12px, 3.4vw, 16px);
+        line-height: 1.5;
         color: #fff8ec;
         text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75);
       }
       .kt-script-accent {
         font-family: 'Dancing Script', cursive;
         font-size: 1.2em;
-        color: #ffd86b;
+        color: #ffe9a8;
+        -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.55);
+        text-shadow:
+          0 0 5px rgba(0, 0, 0, 0.9),
+          0 0 12px rgba(0, 0, 0, 0.75),
+          0 2px 5px rgba(0, 0, 0, 0.95);
       }
       .kt-claim-btn {
         width: auto;
