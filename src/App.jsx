@@ -117,16 +117,20 @@ function GlobalStyles() {
         min-height: 100svh;
         width: 100%;
         position: relative;
-        overflow: hidden;
+        overflow-x: hidden;
         background: #0a0000;
       }
-      .kt-scene,
-      .kt-voucher-screen {
+      .kt-scene {
         position: fixed;
         inset: 0;
         width: 100%;
         height: 100%;
         overflow: hidden;
+      }
+      .kt-voucher-screen {
+        position: relative;
+        width: 100%;
+        min-height: max(100svh, 720px);
       }
       .kt-curtain-bg {
         position: absolute;
@@ -229,7 +233,7 @@ function GlobalStyles() {
       .kt-voucher-actions-wrap {
         position: absolute;
         left: 50%;
-        bottom: 5%;
+        top: calc(56% + 105px);
         transform: translateX(-50%);
         width: 88%;
         max-width: 360px;
@@ -522,23 +526,27 @@ function GlobalStyles() {
       .kt-gift-card {
         position: absolute;
         left: 50%;
-        top: 42%;
-        width: min(74%, 300px);
-        padding: 20px;
+        top: 56%;
+        width: min(37%, 150px);
+        padding: 10px;
         transform: translate(-50%, -50%);
         z-index: 5;
         box-shadow:
           0 0 0 1px rgba(212, 175, 55, 0.5),
-          0 20px 50px rgba(0, 0, 0, 0.6),
-          0 0 44px rgba(212, 175, 55, 0.4);
+          0 10px 26px rgba(0, 0, 0, 0.6),
+          0 0 22px rgba(212, 175, 55, 0.4);
         animation: kt-gift-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
       }
       .kt-gift-card .kt-badge {
-        font-size: 18px;
-        padding: 8px 18px;
+        font-size: 12px;
+        padding: 4px 10px;
+      }
+      .kt-gift-card .kt-qr-wrap {
+        padding: 6px;
       }
       .kt-gift-card .kt-code {
-        font-size: 16px;
+        font-size: 10px;
+        padding: 5px 6px;
       }
       @keyframes kt-gift-pop {
         0% {
@@ -560,7 +568,7 @@ function GlobalStyles() {
       .kt-burst-flash {
         position: absolute;
         left: 50%;
-        top: 42%;
+        top: 56%;
         width: 36px;
         height: 36px;
         margin: -18px 0 0 -18px;
@@ -588,7 +596,7 @@ function GlobalStyles() {
       .kt-spark-wrap {
         position: absolute;
         left: 50%;
-        top: 42%;
+        top: 56%;
         width: 0;
         height: 0;
         z-index: 4;
@@ -610,7 +618,7 @@ function GlobalStyles() {
           opacity: 1;
         }
         100% {
-          transform: translateX(92px) scale(0);
+          transform: translateX(50px) scale(0);
           opacity: 0;
         }
       }
@@ -735,8 +743,10 @@ function GuestPage() {
   const [previewSrc, setPreviewSrc] = useState(null)
   const [screen, setScreen] = useState('curtain') // 'curtain' | 'stage' | 'voucher'
   const [claiming, setClaiming] = useState(false)
+  const [giftVisible, setGiftVisible] = useState(false)
   const captureRef = useRef(null)
   const audioRef = useRef(null)
+  const bgLoadedRef = useRef(null)
 
   useEffect(() => {
     if (!supabase) return
@@ -744,6 +754,17 @@ function GuestPage() {
     // cửa không phải chờ round-trip đầu tiên (DNS/TLS + cold start) nữa.
     // Query builder của supabase-js chỉ gửi request khi được .then()/await.
     supabase.from('vouchers').select('code', { head: true, count: 'exact' }).limit(1).then(() => {})
+  }, [])
+
+  useEffect(() => {
+    // Tải trước ảnh render công trình ngay từ màn rèm, để lúc chuyển sang
+    // màn mã khuyến mãi thì ảnh đã sẵn sàng hiện ngay, không phải chờ tải.
+    bgLoadedRef.current = new Promise((resolve) => {
+      const img = new Image()
+      img.src = '/image.png'
+      img.onload = resolve
+      img.onerror = resolve
+    })
   }, [])
 
   async function loadExisting(existingCode) {
@@ -802,9 +823,12 @@ function GuestPage() {
   async function handleClaimClick() {
     if (claiming) return
     setClaiming(true)
-    const ok = await handleGetVoucher()
+    const [ok] = await Promise.all([handleGetVoucher(), bgLoadedRef.current])
     setClaiming(false)
-    if (ok) setScreen('voucher')
+    if (ok) {
+      setScreen('voucher')
+      setTimeout(() => setGiftVisible(true), 300)
+    }
   }
 
   async function handleCopy() {
@@ -895,34 +919,38 @@ function GuestPage() {
         <div className="kt-voucher-screen">
           <img src="/image.png" alt={CONFIG.storeName} className="kt-curtain-bg" />
 
-          <div ref={captureRef} className="kt-voucher-content">
-            <span className="kt-burst-flash" />
-            {SPARK_ANGLES.map((angle) => (
-              <span key={angle} className="kt-spark-wrap" style={{ transform: `rotate(${angle}deg)` }}>
-                <span className="kt-spark" />
-              </span>
-            ))}
-            <div className="kt-card kt-center kt-gift-card">
-              <span className="kt-badge">-{CONFIG.discountPercent}%</span>
-              <div className="kt-qr-wrap">
-                <QRCode value={code} size={160} />
+          {giftVisible && (
+            <>
+              <div ref={captureRef} className="kt-voucher-content">
+                <span className="kt-burst-flash" />
+                {SPARK_ANGLES.map((angle) => (
+                  <span key={angle} className="kt-spark-wrap" style={{ transform: `rotate(${angle}deg)` }}>
+                    <span className="kt-spark" />
+                  </span>
+                ))}
+                <div className="kt-card kt-center kt-gift-card">
+                  <span className="kt-badge">-{CONFIG.discountPercent}%</span>
+                  <div className="kt-qr-wrap">
+                    <QRCode value={code} size={80} />
+                  </div>
+                  <div className="kt-code">{code}</div>
+                </div>
               </div>
-              <div className="kt-code">{code}</div>
-            </div>
-          </div>
 
-          <div className="kt-voucher-actions-wrap">
-            <div className="kt-card kt-center kt-voucher-drop kt-voucher-drop-delay">
-              <button className="kt-btn kt-btn-secondary" onClick={handleCopy}>
-                Sao chép mã
-              </button>
-              <p className="kt-screenshot-hint">📸 Hãy chụp màn hình để lưu lại voucher nhé!</p>
-              <button className="kt-download-link" onClick={handleDownloadImage} disabled={downloading}>
-                {downloading ? 'Đang tạo ảnh...' : '📥 Hoặc bấm vào đây để tải ảnh'}
-              </button>
-              {error && <p style={{ color: '#e74c3c', fontSize: 13 }}>{error}</p>}
-            </div>
-          </div>
+              <div className="kt-voucher-actions-wrap">
+                <div className="kt-card kt-center kt-voucher-drop kt-voucher-drop-delay">
+                  <button className="kt-btn kt-btn-secondary" onClick={handleCopy}>
+                    Sao chép mã
+                  </button>
+                  <p className="kt-screenshot-hint">📸 Hãy chụp màn hình để lưu lại voucher nhé!</p>
+                  <button className="kt-download-link" onClick={handleDownloadImage} disabled={downloading}>
+                    {downloading ? 'Đang tạo ảnh...' : '📥 Hoặc bấm vào đây để tải ảnh'}
+                  </button>
+                  {error && <p style={{ color: '#e74c3c', fontSize: 13 }}>{error}</p>}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       )}
 
