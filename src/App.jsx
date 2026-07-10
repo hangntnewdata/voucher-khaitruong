@@ -872,8 +872,10 @@ function GuestPage() {
           {screen === 'stage' && (
             <div className="kt-stage-content">
               <p className="kt-stage-tagline">
-                Hát hết mình, tạo dáng hết cỡ tại tổ hợp{' '}
-                <span className="kt-script-accent">self-booth &amp; music box</span> đầu tiên tại Cần Thơ
+                Hát hết mình, tạo dáng hết cỡ
+                <br />
+                tại tổ hợp <span className="kt-script-accent">self-booth &amp; music box</span> đầu tiên tại Cần
+                Thơ
               </p>
               <button
                 type="button"
