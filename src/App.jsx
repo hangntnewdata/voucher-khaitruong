@@ -891,7 +891,7 @@ function GuestPage() {
 
       {screen === 'voucher' && (
         <div className="kt-voucher-screen">
-          <img src="/pic.jpg" alt={CONFIG.storeName} className="kt-curtain-bg" />
+          <img src="/image.png" alt={CONFIG.storeName} className="kt-curtain-bg" />
 
           <div ref={captureRef} className="kt-voucher-content">
             <span className="kt-burst-flash" />
