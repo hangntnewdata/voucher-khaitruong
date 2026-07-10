@@ -142,6 +142,11 @@ function GlobalStyles() {
         width: 100%;
         height: 100%;
         overflow: hidden;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .kt-scene.kt-scene-ready {
+        opacity: 1;
       }
       .kt-voucher-screen {
         position: relative;
@@ -325,7 +330,7 @@ function GlobalStyles() {
       .kt-voucher-actions-wrap {
         position: absolute;
         left: 50%;
-        top: calc(52% + 138px);
+        top: calc(52% + 109px);
         transform: translateX(-50%);
         width: 88%;
         max-width: 227px;
@@ -639,7 +644,7 @@ function GlobalStyles() {
       .kt-gift-card {
         position: absolute;
         left: 50%;
-        top: calc(52% - 19px);
+        top: calc(52% - 48px);
         width: min(44.4%, 177px);
         padding: 12px;
         transform: translate(-50%, -50%);
@@ -681,7 +686,7 @@ function GlobalStyles() {
       .kt-burst-flash {
         position: absolute;
         left: 50%;
-        top: calc(52% - 19px);
+        top: calc(52% - 48px);
         width: 36px;
         height: 36px;
         margin: -18px 0 0 -18px;
@@ -709,7 +714,7 @@ function GlobalStyles() {
       .kt-spark-wrap {
         position: absolute;
         left: 50%;
-        top: calc(52% - 19px);
+        top: calc(52% - 48px);
         width: 0;
         height: 0;
         z-index: 4;
@@ -857,6 +862,7 @@ function GuestPage() {
   const [screen, setScreen] = useState('curtain') // 'curtain' | 'stage' | 'voucher'
   const [claiming, setClaiming] = useState(false)
   const [giftVisible, setGiftVisible] = useState(false)
+  const [curtainReady, setCurtainReady] = useState(false)
   const captureRef = useRef(null)
   const audioRef = useRef(null)
   const bgLoadedRef = useRef(null)
@@ -867,6 +873,19 @@ function GuestPage() {
     // cửa không phải chờ round-trip đầu tiên (DNS/TLS + cold start) nữa.
     // Query builder của supabase-js chỉ gửi request khi được .then()/await.
     supabase.from('vouchers').select('code', { head: true, count: 'exact' }).limit(1).then(() => {})
+  }, [])
+
+  useEffect(() => {
+    // Chờ cả 2 ảnh rèm tải xong rồi mới hiện chữ + ảnh cùng lúc, tránh
+    // chữ "Sân khấu này là của bạn" hiện trước khi ảnh rèm còn đang tải.
+    const preload = (src) =>
+      new Promise((resolve) => {
+        const img = new Image()
+        img.src = src
+        img.onload = resolve
+        img.onerror = resolve
+      })
+    Promise.all([preload('/2.png'), preload('/1.png')]).then(() => setCurtainReady(true))
   }, [])
 
   useEffect(() => {
@@ -984,7 +1003,7 @@ function GuestPage() {
       <audio ref={audioRef} src="/bgm.mp3" loop preload="none" />
 
       {screen !== 'voucher' && (
-        <div className="kt-scene">
+        <div className={`kt-scene ${curtainReady ? 'kt-scene-ready' : ''}`}>
           <img src="/2.png" alt="" className="kt-curtain-bg" />
           <img
             src="/1.png"
