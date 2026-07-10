@@ -308,7 +308,7 @@ function GlobalStyles() {
       .kt-tagline-gold {
         display: inline-block;
         font-weight: 900;
-        font-size: clamp(19px, 5.6vw, 25px);
+        font-size: clamp(17px, 4.9vw, 22px);
         letter-spacing: 0.5px;
         color: #ffe9a8;
         padding: 6px 2px;
@@ -321,6 +321,16 @@ function GlobalStyles() {
       }
       .kt-btn.kt-claim-btn {
         width: 75%;
+        animation: kt-btn-glow 1.8s ease-in-out infinite;
+      }
+      @keyframes kt-btn-glow {
+        0%,
+        100% {
+          box-shadow: 0 0 6px rgba(212, 175, 55, 0.45), 0 0 0 rgba(255, 233, 168, 0);
+        }
+        50% {
+          box-shadow: 0 0 22px rgba(255, 233, 168, 0.95), 0 0 42px rgba(212, 175, 55, 0.6);
+        }
       }
       .kt-stage-error {
         margin: 10px 0 0;
