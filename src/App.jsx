@@ -25,6 +25,16 @@ try {
 const LOCAL_STORAGE_KEY = 'kt_voucher_code'
 const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // bỏ O,0,I,1
 const SPARK_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315]
+const BLING_SPARKLES = [
+  { top: '30%', left: '16%', delay: '0s', size: 14 },
+  { top: '24%', left: '80%', delay: '0.5s', size: 10 },
+  { top: '42%', left: '88%', delay: '1.1s', size: 12 },
+  { top: '68%', left: '10%', delay: '1.6s', size: 16 },
+  { top: '38%', left: '48%', delay: '0.8s', size: 9 },
+  { top: '72%', left: '84%', delay: '0.3s', size: 12 },
+  { top: '60%', left: '30%', delay: '2s', size: 10 },
+  { top: '20%', left: '48%', delay: '1.4s', size: 11 },
+]
 
 function randomCode() {
   let s = ''
@@ -193,11 +203,31 @@ function GlobalStyles() {
         text-shadow: 0 2px 18px rgba(0, 0, 0, 0.6);
         animation: kt-pulse 1.6s ease-in-out infinite;
       }
+      .kt-bling {
+        position: absolute;
+        color: #fff3c4;
+        text-shadow: 0 0 6px rgba(255, 216, 107, 0.95), 0 0 14px rgba(255, 216, 107, 0.7);
+        opacity: 0;
+        pointer-events: none;
+        z-index: 3;
+        animation: kt-twinkle 2.4s ease-in-out infinite;
+      }
+      @keyframes kt-twinkle {
+        0%,
+        100% {
+          opacity: 0;
+          transform: scale(0.4) rotate(0deg);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.15) rotate(18deg);
+        }
+      }
       .kt-stage-content {
         position: absolute;
         left: 50%;
-        bottom: 7%;
-        transform: translateX(-50%);
+        top: 50%;
+        transform: translate(-50%, -50%);
         width: 94%;
         max-width: 420px;
         text-align: center;
@@ -927,6 +957,15 @@ function GuestPage() {
                 <span className="kt-curtain-line1">Sân khấu này là của bạn</span>
                 <span className="kt-curtain-line2">Chạm để trình diễn</span>
               </span>
+              {BLING_SPARKLES.map((s, i) => (
+                <span
+                  key={i}
+                  className="kt-bling"
+                  style={{ top: s.top, left: s.left, fontSize: s.size, animationDelay: s.delay }}
+                >
+                  ✦
+                </span>
+              ))}
             </button>
           )}
 
