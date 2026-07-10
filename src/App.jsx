@@ -165,6 +165,9 @@ function GlobalStyles() {
         animation: kt-curtain-sway 7s ease-in-out infinite;
         transform-origin: center top;
       }
+      .kt-voucher-screen .kt-curtain-bg {
+        object-position: 12% center;
+      }
       .kt-curtain-veil {
         position: absolute;
         inset: 0;
