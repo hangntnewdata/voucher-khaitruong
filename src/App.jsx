@@ -284,12 +284,15 @@ function GlobalStyles() {
         text-align: center;
       }
       .kt-stage-tagline {
-        margin: 0 0 18px;
+        margin: 0 0 12px;
         font-family: 'Playfair Display', 'Times New Roman', serif;
         font-size: clamp(12px, 3.4vw, 16px);
         line-height: 1.5;
         color: #fff8ec;
         text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75);
+      }
+      .kt-stage-tagline-sub {
+        margin: 0 0 18px;
       }
       .kt-script-accent {
         font-family: 'Dancing Script', cursive;
@@ -306,16 +309,17 @@ function GlobalStyles() {
         font-weight: 800;
         color: #ffd86b;
         padding: 4px 12px;
+        margin: 3px 0;
         border-radius: 10px;
         background: rgba(8, 4, 0, 0.8);
         border: 1px solid rgba(212, 175, 55, 0.35);
         -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.6);
         text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9);
       }
-      .kt-claim-btn {
-        width: auto;
-        min-width: 220px;
-        margin: 0 auto;
+      .kt-btn.kt-claim-btn {
+        width: 100vw;
+        margin: 0 calc(-50vw + 50%);
+        border-radius: 0;
       }
       .kt-stage-error {
         margin: 10px 0 0;
@@ -1044,10 +1048,14 @@ function GuestPage() {
           {screen === 'stage' && (
             <div className="kt-stage-content">
               <p className="kt-stage-tagline">
-                <span className="kt-tagline-gold">Hát hết mình, tạo dáng hết cỡ</span>
+                <span className="kt-tagline-gold">HÁT HẾT MÌNH</span>
                 <br />
-                tại tổ hợp <span className="kt-script-accent">self-booth &amp; music box</span> đầu tiên tại Cần
-                Thơ
+                <span className="kt-tagline-gold">TẠO DÁNG HẾT CỠ</span>
+              </p>
+              <p className="kt-stage-tagline kt-stage-tagline-sub">
+                Tại tổ hợp <span className="kt-script-accent">self-booth &amp; music box</span>
+                <br />
+                Đầu tiên tại Cần Thơ
               </p>
               <button
                 type="button"
