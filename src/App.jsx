@@ -306,15 +306,17 @@ function GlobalStyles() {
       }
       .kt-tagline-gold {
         display: inline-block;
-        font-weight: 800;
-        color: #ffd86b;
-        padding: 4px 12px;
-        margin: 3px 0;
-        border-radius: 10px;
-        background: rgba(8, 4, 0, 0.8);
-        border: 1px solid rgba(212, 175, 55, 0.35);
-        -webkit-text-stroke: 0.4px rgba(0, 0, 0, 0.6);
-        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.9);
+        font-weight: 900;
+        font-size: clamp(19px, 5.6vw, 25px);
+        letter-spacing: 0.5px;
+        color: #ffe9a8;
+        padding: 6px 16px;
+        margin: 4px 0;
+        border-radius: 12px;
+        background: rgba(6, 3, 0, 0.85);
+        border: 1px solid rgba(212, 175, 55, 0.55);
+        -webkit-text-stroke: 0.3px rgba(0, 0, 0, 0.4);
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.95);
       }
       .kt-btn.kt-claim-btn {
         width: 75%;
