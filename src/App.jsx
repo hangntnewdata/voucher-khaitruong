@@ -146,7 +146,7 @@ function GlobalStyles() {
       .kt-voucher-screen {
         position: relative;
         width: 100%;
-        min-height: max(100svh, 760px);
+        min-height: max(100svh, 980px);
       }
       .kt-curtain-bg {
         position: absolute;
@@ -325,31 +325,31 @@ function GlobalStyles() {
       .kt-voucher-actions-wrap {
         position: absolute;
         left: 50%;
-        top: calc(52% + 150px);
+        top: calc(52% + 260px);
         transform: translateX(-50%);
         width: 88%;
-        max-width: 260px;
+        max-width: 340px;
       }
       .kt-voucher-actions-wrap .kt-card {
-        padding: 12px;
-        border-radius: 12px;
+        padding: 24px;
+        border-radius: 24px;
       }
       .kt-voucher-actions-wrap .kt-center {
-        gap: 7px;
+        gap: 14px;
       }
       .kt-voucher-actions-wrap .kt-btn {
-        font-size: 8px;
-        padding: 7px 9px;
-        border-radius: 8px;
+        font-size: 16px;
+        padding: 14px 18px;
+        border-radius: 16px;
       }
       .kt-voucher-actions-wrap .kt-screenshot-hint {
-        font-size: clamp(7px, 2vw, 9px);
-        margin: 2px 0 0;
+        font-size: clamp(14px, 4vw, 18px);
+        margin: 4px 0 0;
       }
       .kt-voucher-actions-wrap .kt-download-link {
-        font-size: 7px;
-        padding: 2px;
-        margin: 1px 0 0;
+        font-size: 14px;
+        padding: 4px;
+        margin: 2px 0 0;
       }
       .kt-card {
         background: #14171e;
@@ -640,8 +640,8 @@ function GlobalStyles() {
         position: absolute;
         left: 50%;
         top: calc(52% + 38px);
-        width: min(33.3%, 133px);
-        padding: 9px;
+        width: min(66.6%, 266px);
+        padding: 18px;
         transform: translate(-50%, -50%);
         z-index: 5;
         box-shadow:
@@ -651,15 +651,15 @@ function GlobalStyles() {
         animation: kt-gift-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
       }
       .kt-gift-card .kt-badge {
-        font-size: 12px;
-        padding: 4px 11px;
+        font-size: 24px;
+        padding: 8px 22px;
       }
       .kt-gift-card .kt-qr-wrap {
-        padding: 5px;
+        padding: 10px;
       }
       .kt-gift-card .kt-code {
-        font-size: 11px;
-        padding: 5px 7px;
+        font-size: 22px;
+        padding: 10px 14px;
       }
       @keyframes kt-gift-pop {
         0% {
@@ -1060,7 +1060,7 @@ function GuestPage() {
                 <div className="kt-card kt-center kt-gift-card">
                   <span className="kt-badge">-{CONFIG.discountPercent}%</span>
                   <div className="kt-qr-wrap">
-                    <QRCode value={code} size={72} />
+                    <QRCode value={code} size={144} />
                   </div>
                   <div className="kt-code">{code}</div>
                 </div>
