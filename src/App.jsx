@@ -113,52 +113,126 @@ function GlobalStyles() {
         flex-direction: column;
         gap: 16px;
       }
-      .kt-brand-header {
-        text-align: center;
-      }
-      .kt-brand-eyebrow {
-        margin: 0 0 6px;
-        font-size: clamp(11px, 3.2vw, 13px);
-        font-weight: 700;
-        letter-spacing: 0.6px;
-        color: #d4af37;
-      }
-      .kt-brand-name {
-        margin: 0;
-        font-size: clamp(30px, 9.5vw, 48px);
-        font-weight: 900;
-        line-height: 1.05;
-        letter-spacing: -0.5px;
-        background: linear-gradient(135deg, #fff6dd 0%, #e9c558 35%, #d4af37 65%, #a67c1f 100%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 2px 24px rgba(212, 175, 55, 0.25);
-      }
-      .kt-brand-address {
-        margin: 8px 0 0;
-        font-size: clamp(13px, 3.6vw, 15px);
-        color: #c9ccd3;
-        font-weight: 600;
-      }
-      .kt-brand-date {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 10px;
-        padding: 8px 18px;
-        border-radius: 999px;
-        background: rgba(212, 175, 55, 0.12);
-        border: 1px solid rgba(212, 175, 55, 0.45);
-        color: #f0d98c;
-        font-size: clamp(12.5px, 3.4vw, 14px);
-        font-weight: 700;
-      }
-      .kt-capture {
+      .kt-stage-app {
+        min-height: 100svh;
+        width: 100%;
         position: relative;
+        overflow: hidden;
+        background: #0a0000;
+      }
+      .kt-scene,
+      .kt-voucher-screen {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+      .kt-curtain-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .kt-curtain-veil {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transform-origin: center;
+        transition: opacity 0.9s ease, transform 0.9s ease;
+      }
+      .kt-curtain-veil-open {
+        opacity: 0;
+        transform: scale(1.06);
+        pointer-events: none;
+      }
+      .kt-scene-hit {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        cursor: pointer;
+      }
+      .kt-curtain-text {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 86%;
+        max-width: 420px;
+        text-align: center;
         display: flex;
         flex-direction: column;
-        gap: 16px;
+        gap: 14px;
+      }
+      .kt-curtain-line1 {
+        font-family: 'Playfair Display', 'Times New Roman', serif;
+        font-size: clamp(22px, 7vw, 34px);
+        font-weight: 700;
+        color: #fff8ec;
+        text-shadow: 0 2px 18px rgba(0, 0, 0, 0.65);
+      }
+      .kt-curtain-line2 {
+        font-family: 'Dancing Script', cursive;
+        font-size: clamp(28px, 9vw, 46px);
+        font-weight: 700;
+        color: #ffd86b;
+        text-shadow: 0 2px 18px rgba(0, 0, 0, 0.6);
+        animation: kt-pulse 1.6s ease-in-out infinite;
+      }
+      .kt-stage-content {
+        position: absolute;
+        left: 50%;
+        bottom: 7%;
+        transform: translateX(-50%);
+        width: 88%;
+        max-width: 420px;
+        text-align: center;
+      }
+      .kt-stage-tagline {
+        margin: 0 0 18px;
+        font-family: 'Playfair Display', 'Times New Roman', serif;
+        font-size: clamp(15px, 4.4vw, 19px);
+        line-height: 1.55;
+        color: #fff8ec;
+        text-shadow: 0 2px 14px rgba(0, 0, 0, 0.75);
+      }
+      .kt-script-accent {
+        font-family: 'Dancing Script', cursive;
+        font-size: 1.2em;
+        color: #ffd86b;
+      }
+      .kt-claim-btn {
+        width: auto;
+        min-width: 220px;
+        margin: 0 auto;
+      }
+      .kt-stage-error {
+        margin: 10px 0 0;
+        color: #ff8a80;
+        font-size: 13px;
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+      }
+      .kt-voucher-content {
+        position: absolute;
+        inset: 0;
+      }
+      .kt-voucher-actions-wrap {
+        position: absolute;
+        left: 50%;
+        bottom: 5%;
+        transform: translateX(-50%);
+        width: 88%;
+        max-width: 360px;
       }
       .kt-card {
         background: #14171e;
@@ -425,94 +499,6 @@ function GlobalStyles() {
         opacity: 0.6;
         cursor: not-allowed;
       }
-      .kt-door-wrap {
-        position: relative;
-        border-radius: 20px;
-        overflow: hidden;
-        border: 1px solid #2a2f3b;
-        perspective: 1100px;
-      }
-      .kt-door-img {
-        width: 100%;
-        display: block;
-      }
-      .kt-door-leaf {
-        position: absolute;
-        top: 35%;
-        height: 34%;
-        width: 18.5%;
-        background-image: url('/pic.jpg');
-        background-size: 540.5% 294.1%;
-        background-repeat: no-repeat;
-        transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), filter 0.6s ease;
-        backface-visibility: hidden;
-      }
-      .kt-door-leaf-left {
-        left: 31%;
-        background-position: 38% 53%;
-        transform-origin: 0% 50%;
-      }
-      .kt-door-leaf-right {
-        left: 49.5%;
-        background-position: 60.7% 53%;
-        transform-origin: 100% 50%;
-      }
-      .kt-door-open .kt-door-leaf-left {
-        transform: rotateY(-115deg);
-        filter: brightness(0.55);
-      }
-      .kt-door-open .kt-door-leaf-right {
-        transform: rotateY(115deg);
-        filter: brightness(0.55);
-      }
-      .kt-door-hotspot {
-        position: absolute;
-        left: 31%;
-        top: 35%;
-        width: 37%;
-        height: 34%;
-        border: none;
-        background: transparent;
-        padding: 0;
-        margin: 0;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-      .kt-door-hotspot:disabled {
-        cursor: default;
-      }
-      .kt-door-glow {
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
-        box-shadow: 0 0 0 2px rgba(255, 216, 107, 0.8), 0 0 22px 6px rgba(212, 175, 55, 0.55);
-        animation: kt-door-pulse 1.6s ease-in-out infinite;
-      }
-      .kt-door-hotspot:disabled .kt-door-glow {
-        animation: none;
-        box-shadow: none;
-      }
-      @keyframes kt-door-pulse {
-        0%, 100% {
-          opacity: 0.5;
-          transform: scale(0.97);
-        }
-        50% {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-      .kt-door-hint {
-        margin: 10px 0 0;
-        text-align: center;
-        font-size: clamp(14px, 4vw, 16px);
-        font-weight: 800;
-        color: #ffd86b;
-        text-shadow: 0 0 10px rgba(255, 216, 107, 0.8), 0 0 20px rgba(212, 175, 55, 0.5);
-        animation: kt-pulse 1.2s ease-in-out infinite;
-      }
       @keyframes kt-drop-in {
         0% {
           opacity: 0;
@@ -535,10 +521,10 @@ function GlobalStyles() {
       }
       .kt-gift-card {
         position: absolute;
-        left: 49.5%;
-        top: 52%;
-        width: min(58%, 220px);
-        padding: 14px;
+        left: 50%;
+        top: 42%;
+        width: min(74%, 300px);
+        padding: 20px;
         transform: translate(-50%, -50%);
         z-index: 5;
         box-shadow:
@@ -548,15 +534,11 @@ function GlobalStyles() {
         animation: kt-gift-pop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both;
       }
       .kt-gift-card .kt-badge {
-        font-size: 16px;
-        padding: 6px 14px;
-      }
-      .kt-gift-card .kt-qr-wrap {
-        padding: 8px;
+        font-size: 18px;
+        padding: 8px 18px;
       }
       .kt-gift-card .kt-code {
-        font-size: 14px;
-        padding: 8px 10px;
+        font-size: 16px;
       }
       @keyframes kt-gift-pop {
         0% {
@@ -577,8 +559,8 @@ function GlobalStyles() {
       }
       .kt-burst-flash {
         position: absolute;
-        left: 49.5%;
-        top: 52%;
+        left: 50%;
+        top: 42%;
         width: 36px;
         height: 36px;
         margin: -18px 0 0 -18px;
@@ -605,8 +587,8 @@ function GlobalStyles() {
       }
       .kt-spark-wrap {
         position: absolute;
-        left: 49.5%;
-        top: 52%;
+        left: 50%;
+        top: 42%;
         width: 0;
         height: 0;
         z-index: 4;
@@ -751,9 +733,10 @@ function GuestPage() {
   const [error, setError] = useState('')
   const [downloading, setDownloading] = useState(false)
   const [previewSrc, setPreviewSrc] = useState(null)
-  const [doorState, setDoorState] = useState('closed')
+  const [screen, setScreen] = useState('curtain') // 'curtain' | 'stage' | 'voucher'
+  const [claiming, setClaiming] = useState(false)
   const captureRef = useRef(null)
-  const doorRevealed = doorState === 'open' && !!code
+  const audioRef = useRef(null)
 
   useEffect(() => {
     if (!supabase) return
@@ -810,14 +793,18 @@ function GuestPage() {
     return createNew()
   }
 
-  function handleDoorClick() {
-    if (doorState !== 'closed') return
-    setDoorState('opening')
-    const voucherReady = handleGetVoucher()
-    const animationDone = new Promise((resolve) => setTimeout(resolve, 600))
-    Promise.all([voucherReady, animationDone]).then(([ok]) => {
-      setDoorState(ok ? 'open' : 'closed')
-    })
+  function handleCurtainTap() {
+    if (screen !== 'curtain') return
+    audioRef.current?.play().catch(() => {})
+    setScreen('stage')
+  }
+
+  async function handleClaimClick() {
+    if (claiming) return
+    setClaiming(true)
+    const ok = await handleGetVoucher()
+    setClaiming(false)
+    if (ok) setScreen('voucher')
   }
 
   async function handleCopy() {
@@ -856,76 +843,86 @@ function GuestPage() {
   }
 
   return (
-    <div className="kt-app">
-      <div className="kt-container">
-        <div className="kt-brand-header">
-          <p className="kt-brand-eyebrow">KHU PHỨC HỢP SELF-BOOTH &amp; MUSIC BOX ĐẦU TIÊN TẠI CẦN THƠ</p>
-          <h1 className="kt-brand-name">ANTI MORNING</h1>
-          <p className="kt-brand-address">HẺM 51, ĐƯỜNG 3/2, NINH KIỀU, CẦN THƠ</p>
-          <span className="kt-brand-date">GRAND OPENING: 28/7/2026</span>
-        </div>
+    <div className="kt-stage-app">
+      <audio ref={audioRef} src="/bgm.mp3" loop preload="none" />
 
-        <div ref={captureRef} className="kt-capture">
-          <div className={`kt-door-wrap ${doorState !== 'closed' ? 'kt-door-open' : ''}`}>
-            <img src="/pic.jpg" alt={CONFIG.storeName} className="kt-door-img" />
-            <div className="kt-door-leaf kt-door-leaf-left" />
-            <div className="kt-door-leaf kt-door-leaf-right" />
-            {!doorRevealed && (
+      {screen !== 'voucher' && (
+        <div className="kt-scene">
+          <img src="/2.png" alt="" className="kt-curtain-bg" />
+          <img
+            src="/1.png"
+            alt=""
+            className={`kt-curtain-veil ${screen === 'stage' ? 'kt-curtain-veil-open' : ''}`}
+          />
+
+          {screen === 'curtain' && (
+            <button
+              type="button"
+              className="kt-scene-hit"
+              onClick={handleCurtainTap}
+              aria-label="Chạm để trình diễn"
+            >
+              <span className="kt-curtain-text">
+                <span className="kt-curtain-line1">Sân khấu này là của bạn</span>
+                <span className="kt-curtain-line2">Chạm để trình diễn</span>
+              </span>
+            </button>
+          )}
+
+          {screen === 'stage' && (
+            <div className="kt-stage-content">
+              <p className="kt-stage-tagline">
+                Hát hết mình, tạo dáng hết cỡ tại tổ hợp{' '}
+                <span className="kt-script-accent">self-booth &amp; music box</span> đầu tiên tại Cần Thơ
+              </p>
               <button
                 type="button"
-                className="kt-door-hotspot"
-                onClick={handleDoorClick}
-                disabled={doorState !== 'closed'}
-                aria-label="Bấm vào cửa để nhận voucher"
+                className="kt-btn kt-claim-btn"
+                onClick={handleClaimClick}
+                disabled={claiming}
               >
-                <span className="kt-door-glow" />
+                {claiming ? 'Đang lấy mã...' : 'Nhận mã giảm giá'}
               </button>
-            )}
-          </div>
-
-          {doorRevealed && (
-            <>
-              <span className="kt-burst-flash" />
-              {SPARK_ANGLES.map((angle) => (
-                <span key={angle} className="kt-spark-wrap" style={{ transform: `rotate(${angle}deg)` }}>
-                  <span className="kt-spark" />
-                </span>
-              ))}
-              <div className="kt-card kt-center kt-gift-card">
-                <span className="kt-badge">-{CONFIG.discountPercent}%</span>
-                <div className="kt-qr-wrap">
-                  <QRCode value={code} size={130} />
-                </div>
-                <div className="kt-code">{code}</div>
-              </div>
-            </>
+              {error && <p className="kt-stage-error">{error}</p>}
+            </div>
           )}
         </div>
+      )}
 
-        {!doorRevealed && (
-          <>
-            <p className="kt-door-hint">
-              {doorState === 'closed' ? '👆 Mở cửa để nhận quà' : 'Đang mở cửa...'}
-            </p>
-            {error && (
-              <p style={{ color: '#e74c3c', fontSize: 13, textAlign: 'center' }}>{error}</p>
-            )}
-          </>
-        )}
+      {screen === 'voucher' && (
+        <div className="kt-voucher-screen">
+          <img src="/pic.jpg" alt={CONFIG.storeName} className="kt-curtain-bg" />
 
-        {doorRevealed && (
-          <div className="kt-card kt-center kt-voucher-drop kt-voucher-drop-delay">
-            <button className="kt-btn kt-btn-secondary" onClick={handleCopy}>
-              Sao chép mã
-            </button>
-            <p className="kt-screenshot-hint">📸 Hãy chụp màn hình để lưu lại voucher nhé!</p>
-            <button className="kt-download-link" onClick={handleDownloadImage} disabled={downloading}>
-              {downloading ? 'Đang tạo ảnh...' : '📥 Hoặc bấm vào đây để tải ảnh'}
-            </button>
-            {error && <p style={{ color: '#e74c3c', fontSize: 13 }}>{error}</p>}
+          <div ref={captureRef} className="kt-voucher-content">
+            <span className="kt-burst-flash" />
+            {SPARK_ANGLES.map((angle) => (
+              <span key={angle} className="kt-spark-wrap" style={{ transform: `rotate(${angle}deg)` }}>
+                <span className="kt-spark" />
+              </span>
+            ))}
+            <div className="kt-card kt-center kt-gift-card">
+              <span className="kt-badge">-{CONFIG.discountPercent}%</span>
+              <div className="kt-qr-wrap">
+                <QRCode value={code} size={160} />
+              </div>
+              <div className="kt-code">{code}</div>
+            </div>
           </div>
-        )}
-      </div>
+
+          <div className="kt-voucher-actions-wrap">
+            <div className="kt-card kt-center kt-voucher-drop kt-voucher-drop-delay">
+              <button className="kt-btn kt-btn-secondary" onClick={handleCopy}>
+                Sao chép mã
+              </button>
+              <p className="kt-screenshot-hint">📸 Hãy chụp màn hình để lưu lại voucher nhé!</p>
+              <button className="kt-download-link" onClick={handleDownloadImage} disabled={downloading}>
+                {downloading ? 'Đang tạo ảnh...' : '📥 Hoặc bấm vào đây để tải ảnh'}
+              </button>
+              {error && <p style={{ color: '#e74c3c', fontSize: 13 }}>{error}</p>}
+            </div>
+          </div>
+        </div>
+      )}
 
       {previewSrc && (
         <div className="kt-modal-overlay" onClick={() => setPreviewSrc(null)}>
