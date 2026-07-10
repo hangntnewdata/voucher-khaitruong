@@ -279,7 +279,7 @@ function GlobalStyles() {
       .kt-voucher-actions-wrap {
         position: absolute;
         left: 50%;
-        top: calc(60% + 150px);
+        top: calc(52% + 150px);
         transform: translateX(-50%);
         width: 88%;
         max-width: 260px;
@@ -593,7 +593,7 @@ function GlobalStyles() {
       .kt-gift-card {
         position: absolute;
         left: 50%;
-        top: calc(60% + 38px);
+        top: calc(52% + 38px);
         width: min(33.3%, 133px);
         padding: 9px;
         transform: translate(-50%, -50%);
@@ -635,7 +635,7 @@ function GlobalStyles() {
       .kt-burst-flash {
         position: absolute;
         left: 50%;
-        top: calc(60% + 38px);
+        top: calc(52% + 38px);
         width: 36px;
         height: 36px;
         margin: -18px 0 0 -18px;
@@ -663,7 +663,7 @@ function GlobalStyles() {
       .kt-spark-wrap {
         position: absolute;
         left: 50%;
-        top: calc(60% + 38px);
+        top: calc(52% + 38px);
         width: 0;
         height: 0;
         z-index: 4;
@@ -828,7 +828,7 @@ function GuestPage() {
     // màn mã khuyến mãi thì ảnh đã sẵn sàng hiện ngay, không phải chờ tải.
     bgLoadedRef.current = new Promise((resolve) => {
       const img = new Image()
-      img.src = '/image.png'
+      img.src = '/render.png'
       img.onload = resolve
       img.onerror = resolve
     })
@@ -993,7 +993,7 @@ function GuestPage() {
 
       {screen === 'voucher' && (
         <div className="kt-voucher-screen">
-          <img src="/image.png" alt={CONFIG.storeName} className="kt-curtain-bg" />
+          <img src="/render.png" alt={CONFIG.storeName} className="kt-curtain-bg" />
 
           {giftVisible && (
             <>
