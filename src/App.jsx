@@ -325,7 +325,7 @@ function GlobalStyles() {
       .kt-voucher-actions-wrap {
         position: absolute;
         left: 50%;
-        top: calc(52% + 195px);
+        top: calc(52% + 138px);
         transform: translateX(-50%);
         width: 88%;
         max-width: 227px;
@@ -639,7 +639,7 @@ function GlobalStyles() {
       .kt-gift-card {
         position: absolute;
         left: 50%;
-        top: calc(52% + 38px);
+        top: calc(52% - 19px);
         width: min(44.4%, 177px);
         padding: 12px;
         transform: translate(-50%, -50%);
@@ -681,7 +681,7 @@ function GlobalStyles() {
       .kt-burst-flash {
         position: absolute;
         left: 50%;
-        top: calc(52% + 38px);
+        top: calc(52% - 19px);
         width: 36px;
         height: 36px;
         margin: -18px 0 0 -18px;
@@ -709,7 +709,7 @@ function GlobalStyles() {
       .kt-spark-wrap {
         position: absolute;
         left: 50%;
-        top: calc(52% + 38px);
+        top: calc(52% - 19px);
         width: 0;
         height: 0;
         z-index: 4;
