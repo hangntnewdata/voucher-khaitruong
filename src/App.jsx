@@ -23,7 +23,8 @@ try {
 }
 
 const LOCAL_STORAGE_KEY = 'kt_voucher_code'
-const CODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789' // bỏ O,0,I,1
+const CODE_LETTERS = 'ABCDEFGHJKLMNPQRSTUVWXYZ' // bỏ O, I
+const CODE_DIGITS = '23456789' // bỏ 0, 1
 const SPARK_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315]
 const BLING_SPARKLES = [
   { top: '12%', left: '14%', delay: '0s', size: 13, dur: '2s' },
@@ -43,11 +44,14 @@ const BLING_SPARKLES = [
 ]
 
 function randomCode() {
-  let s = ''
-  for (let i = 0; i < 8; i++) {
-    s += CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)]
+  // 4 ký tự: 3 chữ + 1 số, số nằm ở vị trí ngẫu nhiên
+  const chars = []
+  for (let i = 0; i < 3; i++) {
+    chars.push(CODE_LETTERS[Math.floor(Math.random() * CODE_LETTERS.length)])
   }
-  return `KT-${s}`
+  const digit = CODE_DIGITS[Math.floor(Math.random() * CODE_DIGITS.length)]
+  chars.splice(Math.floor(Math.random() * (chars.length + 1)), 0, digit)
+  return `KT-${chars.join('')}`
 }
 
 function detectDevice() {
@@ -830,6 +834,29 @@ function GlobalStyles() {
         font-size: 13px;
         cursor: pointer;
       }
+      .kt-home-btn {
+        position: fixed;
+        top: max(14px, env(safe-area-inset-top));
+        left: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: 36px;
+        padding: 0 14px 0 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(212, 175, 55, 0.55);
+        background: rgba(6, 3, 0, 0.72);
+        color: #ffe9a8;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1;
+        cursor: pointer;
+        z-index: 20;
+        backdrop-filter: blur(4px);
+      }
+      .kt-home-btn:active {
+        transform: scale(0.96);
+      }
     `}</style>
   )
 }
@@ -916,7 +943,7 @@ function GuestPage() {
         img.onload = resolve
         img.onerror = resolve
       })
-    Promise.all([preload('/2.png'), preload('/1.png')]).then(() => setCurtainReady(true))
+    Promise.all([preload('/2.jpg'), preload('/1.jpg')]).then(() => setCurtainReady(true))
   }, [])
 
   useEffect(() => {
@@ -924,7 +951,7 @@ function GuestPage() {
     // màn mã khuyến mãi thì ảnh đã sẵn sàng hiện ngay, không phải chờ tải.
     bgLoadedRef.current = new Promise((resolve) => {
       const img = new Image()
-      img.src = '/render.png'
+      img.src = '/render.jpg'
       img.onload = resolve
       img.onerror = resolve
     })
@@ -981,6 +1008,12 @@ function GuestPage() {
     if (screen !== 'curtain') return
     audioRef.current?.play().catch(() => {})
     setScreen('stage')
+  }
+
+  function handleGoHome() {
+    setScreen('curtain')
+    setGiftVisible(false)
+    setError('')
   }
 
   async function handleClaimClick() {
@@ -1048,11 +1081,17 @@ function GuestPage() {
     <div className="kt-stage-app">
       <audio ref={audioRef} src="/bgm.mp3" loop preload="none" />
 
+      {screen !== 'curtain' && (
+        <button type="button" className="kt-home-btn" onClick={handleGoHome} aria-label="Về trang đầu">
+          ‹ Trang đầu
+        </button>
+      )}
+
       {screen !== 'voucher' && (
         <div className={`kt-scene ${curtainReady ? 'kt-scene-ready' : ''}`}>
-          <img src="/2.png" alt="" className="kt-curtain-bg" />
+          <img src="/2.jpg" alt="" className="kt-curtain-bg" />
           <img
-            src="/1.png"
+            src="/1.jpg"
             alt=""
             className={`kt-curtain-veil ${screen === 'stage' ? 'kt-curtain-veil-open' : ''}`}
           />
@@ -1115,7 +1154,7 @@ function GuestPage() {
 
       {screen === 'voucher' && (
         <div className="kt-voucher-screen">
-          <img src="/render.png" alt={CONFIG.storeName} className="kt-curtain-bg" />
+          <img src="/render.jpg" alt={CONFIG.storeName} className="kt-curtain-bg" />
 
           {giftVisible && (
             <>
