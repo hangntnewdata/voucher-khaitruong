@@ -972,7 +972,7 @@ function GuestPage() {
   }
 
   async function createNew() {
-    for (let attempt = 0; attempt < 5; attempt++) {
+    for (let attempt = 0; attempt < 10; attempt++) {
       const candidate = randomCode()
       const { error: err } = await supabase
         .from('vouchers')
