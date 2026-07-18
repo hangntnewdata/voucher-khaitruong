@@ -418,6 +418,20 @@ function GlobalStyles() {
         color: #d4af37;
         border: 1px solid #d4af37;
       }
+      .kt-copy-btn {
+        transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.05s ease;
+      }
+      .kt-copy-btn.kt-copied {
+        background: #2ecc71;
+        color: #0f1115;
+        border-color: #2ecc71;
+        animation: kt-copy-pop 0.35s ease;
+      }
+      @keyframes kt-copy-pop {
+        0% { transform: scale(1); }
+        40% { transform: scale(1.06); }
+        100% { transform: scale(1); }
+      }
       .kt-btn-ghost {
         background: transparent;
         color: #9aa0ad;
@@ -873,6 +887,7 @@ function GuestPage() {
   const [code, setCode] = useState(null)
   const [error, setError] = useState('')
   const [downloading, setDownloading] = useState(false)
+  const [copied, setCopied] = useState(false)
   const [previewSrc, setPreviewSrc] = useState(null)
   const [screen, setScreen] = useState('curtain') // 'curtain' | 'stage' | 'voucher'
   const [claiming, setClaiming] = useState(false)
@@ -881,6 +896,7 @@ function GuestPage() {
   const captureRef = useRef(null)
   const audioRef = useRef(null)
   const bgLoadedRef = useRef(null)
+  const copiedTimerRef = useRef(null)
 
   useEffect(() => {
     if (!supabase) return
@@ -983,8 +999,23 @@ function GuestPage() {
     try {
       await navigator.clipboard.writeText(code)
     } catch {
-      // ignore
+      // Fallback cho trình duyệt không hỗ trợ Clipboard API
+      try {
+        const ta = document.createElement('textarea')
+        ta.value = code
+        ta.style.position = 'fixed'
+        ta.style.opacity = '0'
+        document.body.appendChild(ta)
+        ta.select()
+        document.execCommand('copy')
+        document.body.removeChild(ta)
+      } catch {
+        // ignore
+      }
     }
+    setCopied(true)
+    if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current)
+    copiedTimerRef.current = setTimeout(() => setCopied(false), 2000)
   }
 
   async function handleDownloadImage() {
@@ -1106,8 +1137,11 @@ function GuestPage() {
 
               <div className="kt-voucher-actions-wrap">
                 <div className="kt-card kt-center kt-voucher-drop kt-voucher-drop-delay">
-                  <button className="kt-btn kt-btn-secondary" onClick={handleCopy}>
-                    Sao chép mã
+                  <button
+                    className={`kt-btn kt-btn-secondary kt-copy-btn${copied ? ' kt-copied' : ''}`}
+                    onClick={handleCopy}
+                  >
+                    {copied ? '✓ Đã sao chép!' : 'Sao chép mã'}
                   </button>
                   <p className="kt-screenshot-hint">📸 Hãy chụp màn hình để lưu lại voucher nhé!</p>
                   <button className="kt-download-link" onClick={handleDownloadImage} disabled={downloading}>
