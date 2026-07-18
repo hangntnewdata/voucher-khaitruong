@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createClient } from '@supabase/supabase-js'
 import QRCode from 'react-qr-code'
-import { Html5Qrcode } from 'html5-qrcode'
 import { toPng } from 'html-to-image'
 
 // ============== CONFIG ==============
@@ -1269,6 +1268,7 @@ function StaffPage() {
     setScanning(true)
     setTimeout(async () => {
       try {
+        const { Html5Qrcode } = await import('html5-qrcode')
         const scanner = new Html5Qrcode('kt-qr-reader')
         scannerRef.current = scanner
         await scanner.start(
