@@ -25,6 +25,41 @@ const LOCAL_STORAGE_KEY = 'kt_voucher_code'
 const CODE_LETTERS = 'ABCDEFGHJKLMNPQRSTUVWXYZ' // bỏ O, I
 const CODE_DIGITS = '23456789' // bỏ 0, 1
 const SPARK_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315]
+
+// ============== MẪU KHUNG ẢNH (GALLERY) ==============
+// KHUNG THẬT: mỗi khung là 1 file PNG trong /public/frames/ (hoạ tiết thật, vùng ảnh
+// trong suốt để ảnh khách lọt qua) — dùng được luôn cho máy in booth.
+// - `img`: đường dẫn file khung.  `w`/`h`: kích thước file (px) -> giữ đúng tỉ lệ.
+// - `slots`: số ô ảnh (chỉ để hiển thị nhãn).  `isNew: true` để hiện "MỚI".
+// Thêm khung mới: bỏ file PNG vào /public/frames/ rồi thêm 1 dòng ở đây.
+const FRAMES = [
+  { id: 'grid4', name: 'Tứ Ảnh 2×2', img: '/frames/grid4.png', w: 955, h: 748, slots: 4 },
+  { id: 'quote', name: 'Thư Tình', img: '/frames/quote.png', w: 414, h: 805, slots: 1 },
+  { id: 'strip4', name: 'Dải Cổ Điển', img: '/frames/strip4.png', w: 375, h: 970, slots: 4 },
+  { id: 'solo', name: 'Độc Bản', img: '/frames/solo.png', w: 570, h: 500, slots: 1 },
+  { id: 'tall', name: 'Chân Dung', img: '/frames/tall.png', w: 414, h: 780, slots: 1, isNew: true },
+  { id: 'dotted', name: 'Cổ Điển Vàng', img: '/frames/dotted.png', w: 580, h: 625, slots: 1 },
+  { id: 'pastel4', name: 'Pastel Tứ Ảnh', img: '/frames/pastel4.png', w: 1414, h: 2000, slots: 4, isNew: true },
+  { id: 'mint', name: 'Mint Fresh', img: '/frames/mint.png', w: 1414, h: 2000, slots: 4, isNew: true },
+  { id: 'gold', name: 'Black Gold', img: '/frames/gold.png', w: 1414, h: 2000, slots: 4, isNew: true },
+  { id: 'blue', name: 'Baby Blue', img: '/frames/blue.png', w: 1414, h: 2000, slots: 1, isNew: true },
+  { id: 'butter', name: 'Golden Butter', img: '/frames/butter.png', w: 1414, h: 2000, slots: 3, isNew: true },
+]
+
+function FrameCard({ frame }) {
+  return (
+    <figure className="am-card">
+      <div className="am-real" style={{ aspectRatio: `${frame.w} / ${frame.h}` }}>
+        {frame.isNew && <span className="am-new">MỚI</span>}
+        <img className="am-real-img" src={frame.img} alt={frame.name} loading="lazy" />
+      </div>
+      <figcaption className="am-cap-name">
+        <span className="am-cap-title">{frame.name}</span>
+        <span className="am-cap-meta">{frame.slots} ảnh</span>
+      </figcaption>
+    </figure>
+  )
+}
 const BLING_SPARKLES = [
   { top: '12%', left: '14%', delay: '0s', size: 13, dur: '2s' },
   { top: '8%', left: '50%', delay: '0.7s', size: 10, dur: '2.4s' },
@@ -856,6 +891,143 @@ function GlobalStyles() {
       .kt-home-btn:active {
         transform: scale(0.96);
       }
+      .kt-gallery-app {
+        min-height: 100svh;
+        width: 100%;
+        padding: 64px 16px 56px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .kt-gallery-inner {
+        width: 100%;
+        max-width: 860px;
+      }
+      .kt-gallery-head {
+        text-align: center;
+        margin-bottom: 26px;
+      }
+      .kt-gallery-eyebrow {
+        font-family: 'Dancing Script', cursive;
+        font-size: clamp(20px, 6vw, 30px);
+        color: #ffe9a8;
+        margin: 0;
+      }
+      .kt-gallery-title {
+        font-family: 'Playfair Display', 'Times New Roman', serif;
+        font-size: clamp(26px, 7vw, 40px);
+        font-weight: 700;
+        margin: 2px 0 10px;
+        color: #fff8ec;
+        letter-spacing: 0.5px;
+      }
+      .kt-gallery-sub {
+        margin: 0 auto;
+        max-width: 460px;
+        color: #b9bec9;
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .kt-tpl-grid {
+        column-count: 2;
+        column-gap: 14px;
+      }
+      @media (min-width: 560px) {
+        .kt-tpl-grid {
+          column-count: 3;
+          column-gap: 16px;
+        }
+      }
+      .am-card {
+        break-inside: avoid;
+        margin: 0 0 18px;
+      }
+      .am-real {
+        position: relative;
+        width: 100%;
+        border-radius: 10px;
+        overflow: hidden;
+        background: linear-gradient(135deg, #f4e4d6 0%, #efd3d0 50%, #e7c3c9 100%);
+        box-shadow: 0 10px 26px rgba(0, 0, 0, 0.5);
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+      }
+      .am-card:active .am-real {
+        transform: scale(0.985);
+      }
+      @media (hover: hover) {
+        .am-card:hover .am-real {
+          transform: translateY(-4px);
+          box-shadow: 0 16px 32px rgba(0, 0, 0, 0.58);
+        }
+      }
+      .am-real-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        object-fit: fill;
+      }
+      .am-new {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        z-index: 4;
+        background: #d4af37;
+        color: #1a0508;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.6px;
+        padding: 3px 8px;
+        border-radius: 999px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+      .am-cap-name {
+        margin: 8px 2px 0;
+        text-align: center;
+      }
+      .am-cap-title {
+        display: block;
+        font-family: 'Playfair Display', serif;
+        font-weight: 700;
+        font-size: 13px;
+        color: #f3e4cf;
+      }
+      .am-cap-meta {
+        display: block;
+        font-size: 11px;
+        color: #b58f5a;
+        margin-top: 1px;
+      }
+      .kt-gallery-foot {
+        text-align: center;
+        margin-top: 28px;
+      }
+      .kt-gallery-foot .kt-btn {
+        width: auto;
+        display: inline-block;
+        padding: 13px 30px;
+      }
+      .kt-gallery-note {
+        margin: 14px auto 0;
+        max-width: 430px;
+        font-size: 12px;
+        color: #7f8695;
+        line-height: 1.5;
+      }
+      .kt-stage-gallery-link {
+        display: inline-block;
+        margin-top: 16px;
+        color: #ffe9a8;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+      }
     `}</style>
   )
 }
@@ -1146,6 +1318,10 @@ function GuestPage() {
                 {claiming ? 'Đang lấy mã...' : 'Nhận mã giảm giá'}
               </button>
               {error && <p className="kt-stage-error">{error}</p>}
+              <br />
+              <a className="kt-stage-gallery-link" href="/?gallery">
+                Xem mẫu khung ảnh →
+              </a>
             </div>
           )}
         </div>
@@ -1593,12 +1769,51 @@ function AdminPage() {
   )
 }
 
+// ============== TRANG MẪU KHUNG ẢNH ==============
+function GalleryPage() {
+  return (
+    <div className="kt-gallery-app">
+      <a className="kt-home-btn" href="/" aria-label="Về trang đầu">
+        ‹ Trang đầu
+      </a>
+
+      <div className="kt-gallery-inner">
+        <div className="kt-gallery-head">
+          <p className="kt-gallery-eyebrow">bộ sưu tập khung ảnh</p>
+          <h1 className="kt-gallery-title">Chọn mẫu khung của bạn</h1>
+          <p className="kt-gallery-sub">
+            Bộ khung Anti Morning — hoạ tiết thật, vùng sáng là chỗ ảnh của bạn. Chọn khung
+            mình thích, tự chụp rồi in bản của riêng mình.
+          </p>
+        </div>
+
+        <div className="kt-tpl-grid">
+          {FRAMES.map((f) => (
+            <FrameCard key={f.id} frame={f} />
+          ))}
+        </div>
+
+        <div className="kt-gallery-foot">
+          <a className="kt-btn" href="/">
+            Nhận mã & tới chụp
+          </a>
+          <p className="kt-gallery-note">
+            Vùng sáng trong khung là nơi ảnh của bạn sẽ hiện ra khi in. Mẫu khung được cập nhật
+            thường xuyên.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ============== APP ROOT ==============
 function App() {
   const params = new URLSearchParams(window.location.search)
   let page = 'guest'
   if (params.has('admin')) page = 'admin'
   else if (params.has('staff')) page = 'staff'
+  else if (params.has('gallery')) page = 'gallery'
 
   return (
     <>
@@ -1606,6 +1821,7 @@ function App() {
       {page === 'guest' && <GuestPage />}
       {page === 'staff' && <StaffPage />}
       {page === 'admin' && <AdminPage />}
+      {page === 'gallery' && <GalleryPage />}
     </>
   )
 }
